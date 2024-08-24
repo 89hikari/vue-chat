@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import TheHeader from "./TheHeader.vue";
+import ChatList from "./chat-list/ChatList.vue";
 </script>
 
 <template>
-  <div class="left-column h-screen shadow-md bg-white">
+  <div class="left-column h-screen shadow-md bg-white w-4/12">
     <TheHeader />
+    <ChatList />
   </div>
 </template>
-
-<style scoped lang="scss">
-.left-column {
-  max-width: 33vw;
-  @media (min-width: 1276px) {
-    width: 25vw;
-  }
-}
-</style>
