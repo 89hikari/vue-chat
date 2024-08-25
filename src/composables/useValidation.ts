@@ -1,7 +1,7 @@
 import { type ZodRawShape, type ZodTypeAny, z } from "zod";
 import { get, groupBy } from "lodash-es";
 import { ref, watch } from "vue";
-import type { FormValue, ICommonForm } from "@/models/validation/IForm";
+import type { FormValue, ICommonForm } from "@/models/IForm";
 
 const objectMap = (
   obj: ICommonForm,
@@ -42,7 +42,7 @@ export default function (
   const validate = async () => {
     clearErrors();
     const rawShape = z
-      .object(objectMap(form, (val) => val.validation) as ZodRawShape)
+      .object(objectMap(form, (val) => val.validation ?? "") as ZodRawShape)
       .refine((data) => data.password === data.passwordConfirmation, {
         message: "Passwords do not match",
         path: ["passwordConfirmation"],

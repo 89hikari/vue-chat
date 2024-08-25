@@ -1,13 +1,9 @@
 <script setup lang="ts">
+import type { IInput } from "@/models/IInput";
 import { computed, ref } from "vue";
 
 const modelValue = defineModel<string>({ default: "", type: String });
-interface Props {
-  label?: string;
-  type?: string;
-  placeholder?: string;
-}
-const props = defineProps<Props>();
+const props = defineProps<IInput>();
 const showedLabel = computed(() => props.label || "Search");
 const showedPlaceholder = ref<string>("");
 </script>
