@@ -1,38 +1,11 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import type { AxiosError } from "axios";
-import type { IServerError } from "@/models/IServerError";
 import { get, post } from "@/helpers/api.helpers";
 import router from "@/router";
 
-type IMyUser = {
-  id: number;
-  name: string;
-  token?: string;
-  refreshToken?: string;
-};
-
-export const useUserStore = defineStore("user", () => {
-  const user = ref<IMyUser | null>(null);
-
-  const login = async (name: string, password: string) => {
-    return await post("auth", "login", { name, password })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error: AxiosError) => {
-        switch (error.status) {
-          case 403:
-            router.push(`/validation/${name}`);
-            return;
-          case 401:
-            return (error.response?.data as IServerError).message;
-          default:
-            console.error(error);
-            return;
-        }
-      });
-  };
+export const useRegistrationStore = defineStore("registration", () => {
+  const loaded = ref<boolean>(false);
 
   const signup = async (
     name: string,
@@ -58,5 +31,7 @@ export const useUserStore = defineStore("user", () => {
     return response.data;
   };
 
-  return { user, login, checkVerification, signup };
+  const toggleLoading = () => (loaded.value = !loaded.value);
+
+  return { loaded, checkVerification, signup, toggleLoading };
 });

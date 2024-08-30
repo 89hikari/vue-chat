@@ -3,8 +3,11 @@ import { ref } from "vue";
 import AppInput from "@/components/AppInput.vue";
 import AppFormSubmitButton from "@/components/AppFormSubmitButton.vue";
 import type { ICommonForm } from "@/models/IForm";
+import { useUserStore } from "@/stores/user.store";
+import AppErrorMessageString from "@/components/AppErrorMessageString.vue";
 
-const incorrectPassword = ref<boolean>(false);
+const errorMessage = ref<string>();
+const userStore = useUserStore();
 
 const formRef = ref<ICommonForm>({
   username: {
@@ -12,7 +15,7 @@ const formRef = ref<ICommonForm>({
     placeholder: "Type here",
     label: "Username or e-mail",
   },
-  email: {
+  password: {
     value: "",
     placeholder: "Type here",
     label: "Password",
@@ -21,7 +24,12 @@ const formRef = ref<ICommonForm>({
 });
 
 const submit = async () => {
-  incorrectPassword.value = !incorrectPassword.value;
+  const loginAttempt = await userStore.login(
+    formRef.value.username.value,
+    formRef.value.password.value
+  );
+
+  typeof loginAttempt === "string" && (errorMessage.value = loginAttempt);
 };
 </script>
 
@@ -37,10 +45,13 @@ const submit = async () => {
       :type="form?.type"
       v-model="form.value"
       class="mb-1"
+      @update:model-value="errorMessage = ''"
     />
   </div>
-  <div v-if="incorrectPassword" class="text-xs text-red-400 mb-5">
-    No account matches your combination
-  </div>
+  <AppErrorMessageString
+    v-if="errorMessage"
+    :text="errorMessage"
+    class="mb-5"
+  />
   <AppFormSubmitButton @submit="submit" />
 </template>

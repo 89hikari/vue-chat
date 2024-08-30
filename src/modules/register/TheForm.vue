@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import AppErrorMessageString from "@/components/AppErrorMessageString.vue";
 import AppInput from "@/components/AppInput.vue";
 import AppFormSubmitButton from "@/components/AppFormSubmitButton.vue";
 import useValidation from "@/composables/useValidation";
@@ -10,8 +11,10 @@ import {
   usernameValidator,
 } from "@/helpers/valudators.helpers";
 import type { ICommonForm } from "@/models/IForm";
-import axios from "axios";
+import { useRegistrationStore } from "@/stores/registration.store";
 
+const store = useRegistrationStore();
+const errorMessage = ref<string>();
 const formRef = ref<ICommonForm>({
   username: {
     value: "",
@@ -44,23 +47,28 @@ const formRef = ref<ICommonForm>({
 const { validate, isValid, getError } = useValidation(formRef.value, {
   mode: "lazy",
 });
+
 const submit = async () => {
   await validate();
   if (isValid.value) {
-    const response = await axios.post("/api/auth/signup", {
-      name: formRef.value.username.value,
-      email: formRef.value.email.value,
-      password: formRef.value.password.value,
-      gender: "male",
-    });
-    if (response.status === 201) {
-      console.log("created");
-    }
+    const signupAttempt = await store.signup(
+      formRef.value.username.value,
+      formRef.value.email.value,
+      formRef.value.password.value,
+      "male"
+    );
+
+    typeof signupAttempt === "string" && (errorMessage.value = signupAttempt);
   }
 };
 </script>
 
 <template>
+  <AppErrorMessageString
+    v-if="errorMessage"
+    :text="errorMessage"
+    class="mb-5"
+  />
   <div
     class="mb-5 w-full max-w-[400px]"
     v-for="(form, key) in formRef"
@@ -72,6 +80,7 @@ const submit = async () => {
       :type="form?.type"
       v-model="form.value"
       class="mb-1"
+      @update:model-value="errorMessage = ''"
     />
     <div class="text-xs text-red-400">{{ getError(key.toString()) }}</div>
   </div>

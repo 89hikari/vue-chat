@@ -20,6 +20,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/register/:identificator",
+      name: "validation",
+      component: () => import("@/views/register/TheRegister.vue"),
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
       path: "/auth",
       name: "auth",
       component: () => import("@/views/auth/TheAuth.vue"),
