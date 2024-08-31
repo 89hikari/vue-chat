@@ -6,6 +6,7 @@ import router from "@/router";
 
 export const useRegistrationStore = defineStore("registration", () => {
   const loaded = ref<boolean>(false);
+  const nameOrEmailToVerify = ref<string>("");
 
   const signup = async (
     name: string,
@@ -14,7 +15,7 @@ export const useRegistrationStore = defineStore("registration", () => {
     gender: string
   ) => {
     return await post("auth", "signup", { name, email, password, gender })
-      .then(() => router.push(`/validation/${name}`))
+      .then(() => router.push(`/register/${name}`))
       .catch((error: AxiosError) => {
         switch (error.status) {
           case 409:
@@ -26,12 +27,27 @@ export const useRegistrationStore = defineStore("registration", () => {
       });
   };
 
-  const checkVerification = async (name: string) => {
-    const response = await get("auth", "check-verification", { name });
-    return response.data;
+  const checkVerification = async (name: string) =>
+    (await get("auth", "check-verification", { name })).data;
+
+  const verify = async (vfCode: string) => {
+    return await post("auth", "verify", {
+      name: nameOrEmailToVerify.value,
+      vfCode,
+    })
+      .then((response) => console.log(response))
+      .catch((error: AxiosError) => {
+        switch (error.status) {
+          case 403:
+            return "Invalid code";
+          case 404:
+            return "User not found";
+          default:
+            console.error(error);
+            return;
+        }
+      });
   };
 
-  const toggleLoading = () => (loaded.value = !loaded.value);
-
-  return { loaded, checkVerification, signup, toggleLoading };
+  return { loaded, checkVerification, signup, verify, nameOrEmailToVerify };
 });

@@ -2,24 +2,27 @@
 import TheRegister from "@/modules/register/TheRegister.vue";
 import router from "@/router";
 import { useRegistrationStore } from "@/stores/registration.store";
-import { onMounted } from "vue";
+import { useUserStore } from "@/stores/user.store";
+import { onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 
 const store = useRegistrationStore();
+const { user } = useUserStore();
 const route = useRoute();
 
 onMounted(async () => {
-  const identificator = route.params.identificator;
+  if (user.token) return;
+  const identificator = route.params.identificator?.toString();
   if (identificator) {
+    store.nameOrEmailToVerify = identificator;
     identificator &&
-      (await store.checkVerification(identificator.toString())) &&
+      (await store.checkVerification(identificator)) &&
       router.push("/auth");
-
-    return;
   }
 
-  store.toggleLoading();
+  store.loaded = true;
 });
+onUnmounted(() => (store.loaded = false));
 </script>
 
 <template>

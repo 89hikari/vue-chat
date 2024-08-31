@@ -12,6 +12,7 @@ import {
 } from "@/helpers/valudators.helpers";
 import type { ICommonForm } from "@/models/IForm";
 import { useRegistrationStore } from "@/stores/registration.store";
+import TheVerify from "./TheVerify.vue";
 
 const store = useRegistrationStore();
 const errorMessage = ref<string>();
@@ -51,38 +52,41 @@ const { validate, isValid, getError } = useValidation(formRef.value, {
 const submit = async () => {
   await validate();
   if (isValid.value) {
-    const signupAttempt = await store.signup(
-      formRef.value.username.value,
-      formRef.value.email.value,
-      formRef.value.password.value,
-      "male"
-    );
-
-    typeof signupAttempt === "string" && (errorMessage.value = signupAttempt);
+    errorMessage.value = (
+      await store.signup(
+        formRef.value.username.value,
+        formRef.value.email.value,
+        formRef.value.password.value,
+        "male"
+      )
+    )?.toString();
   }
 };
 </script>
 
 <template>
-  <AppErrorMessageString
-    v-if="errorMessage"
-    :text="errorMessage"
-    class="mb-5"
-  />
-  <div
-    class="mb-5 w-full max-w-[400px]"
-    v-for="(form, key) in formRef"
-    :key="key"
-  >
-    <AppInput
-      :placeholder="form.placeholder"
-      :label="form.label"
-      :type="form?.type"
-      v-model="form.value"
-      class="mb-1"
-      @update:model-value="errorMessage = ''"
+  <TheVerify v-if="store.nameOrEmailToVerify" />
+  <template v-else>
+    <AppErrorMessageString
+      v-if="errorMessage"
+      :text="errorMessage"
+      class="mb-8"
     />
-    <div class="text-xs text-red-400">{{ getError(key.toString()) }}</div>
-  </div>
-  <AppFormSubmitButton @submit="submit" />
+    <div
+      class="mb-5 w-full max-w-[400px]"
+      v-for="(form, key) in formRef"
+      :key="key"
+    >
+      <AppInput
+        :placeholder="form.placeholder"
+        :label="form.label"
+        :type="form?.type"
+        v-model="form.value"
+        class="mb-1"
+        @update:model-value="errorMessage = ''"
+      />
+      <div class="text-xs text-red-400">{{ getError(key.toString()) }}</div>
+    </div>
+    <AppFormSubmitButton @submit="submit" />
+  </template>
 </template>
