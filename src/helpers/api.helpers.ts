@@ -2,23 +2,35 @@ import axios from "axios";
 
 const apiPrefix = import.meta.env.VITE_SERVER_API_PATH || "/api/";
 
-export const post = async (
-  controllerName: string,
-  methodName: string,
-  params: object
-) => await axios.post(`${apiPrefix}${controllerName}/${methodName}`, params);
+interface IRequestParams {
+  controllerName: string;
+  methodName?: string;
+  queryParams?: object;
+}
 
-export const get = async (
-  controllerName: string,
-  methodName: string,
-  queryParams?: object
-) =>
+export const post = async (params: IRequestParams) =>
+  await axios.post(
+    `${apiPrefix}${params.controllerName}${params.methodName ? `/${params.methodName}` : ""}`,
+    params.queryParams || {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+    }
+  );
+
+export const get = async (params: IRequestParams) =>
   await axios.get(
-    `${apiPrefix}${controllerName}/${methodName}${
-      queryParams
-        ? `?${Object.keys(queryParams)
-            .map((key) => `${key}=${queryParams[key as keyof object]}`)
+    `${apiPrefix}${params.controllerName}${params.methodName ? `/${params.methodName}` : ""}${
+      params.queryParams
+        ? `?${Object.keys(params.queryParams)
+            .map((key) => `${key}=${params.queryParams![key as keyof object]}`)
             .join("&")}`
         : ""
-    }`
+    }`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+      },
+    }
   );

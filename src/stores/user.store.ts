@@ -3,23 +3,26 @@ import { defineStore } from "pinia";
 import type { AxiosError } from "axios";
 import type { IMyUser } from "@/models/IUser";
 import type { IServerError } from "@/models/IServerError";
-import { get, post } from "@/helpers/api.helpers";
+import { post } from "@/helpers/api.helpers";
 import router from "@/router";
 
-const initialUser = {
+const initialUser = () => ({
   token: localStorage.getItem("token"),
   info: null,
-};
+});
 
 export const useUserStore = defineStore("user", () => {
-  const user = ref<IMyUser>({
-    ...initialUser,
-  });
+  const user = ref<IMyUser>(initialUser());
 
   const login = async (name: string, password: string) => {
-    return await post("auth", "login", { name, password })
+    return await post({
+      controllerName: "auth",
+      methodName: "login",
+      queryParams: { name, password },
+    })
       .then((response) => {
-        user.value = response.data;
+        user.value.token = response.data.token;
+        user.value.info = response.data.user;
         localStorage.setItem("token", user.value.token!);
       })
       .catch((error: AxiosError) => {
@@ -36,34 +39,10 @@ export const useUserStore = defineStore("user", () => {
       });
   };
 
-  const signup = async (
-    name: string,
-    email: string,
-    password: string,
-    gender: string
-  ) => {
-    return await post("auth", "signup", { name, email, password, gender })
-      .then(() => router.push(`/register/${name}`))
-      .catch((error: AxiosError) => {
-        switch (error.status) {
-          case 409:
-            return "This login or email is already taken";
-          default:
-            console.error(error);
-            return;
-        }
-      });
-  };
-
-  const checkVerification = async (name: string) => {
-    const response = await get("auth", "check-verification", { name });
-    return response.data;
-  };
-
   const logout = () => {
-    user.value = { ...initialUser };
     localStorage.setItem("token", "");
+    user.value = initialUser();
   };
 
-  return { user, login, checkVerification, signup, logout };
+  return { user, login, logout };
 });

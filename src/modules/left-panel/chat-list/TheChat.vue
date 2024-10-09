@@ -1,24 +1,30 @@
 <script setup lang="ts">
+import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import { toRefs } from "vue";
 
 type Chat = {
-  id: number | string;
-  name: string;
+  id: number;
+  personId: number;
+  personName: string;
   message: string;
-  datetime: string;
+  date: string;
 };
 interface Props {
   chat: Chat;
 }
 
+const sidebarMessages = useSidebarMessages();
 const props = defineProps<Props>();
-const { id, name, message, datetime } = toRefs(props.chat);
+const { personId, personName, message, date } = toRefs(props.chat);
 </script>
 
 <template>
   <div
+    @click="sidebarMessages.setCurrentChat(personId)"
     class="p-2 flex items-center hover:bg-gray-100 cursor-pointer transition ease-in-out duration-200 rounded-lg w-full"
-    :class="{ '!bg-blue-400 !text-white': +id % 2 === 0 }"
+    :class="{
+      '!bg-blue-400 !text-white': personId === sidebarMessages.currentChat,
+    }"
   >
     <div
       style="background-color: aquamarine"
@@ -26,8 +32,8 @@ const { id, name, message, datetime } = toRefs(props.chat);
     ></div>
     <div class="w-[calc(100%-4.25rem)]">
       <div class="flex align-center justify-between">
-        <p class="font-semibold text-base">{{ name }}</p>
-        <span class="text-xs">{{ datetime }}</span>
+        <p class="font-semibold text-base">{{ personName }}</p>
+        <span class="text-xs">{{ date }}</span>
       </div>
       <p class="text-base font-light truncate">
         {{ message }}
