@@ -1,25 +1,14 @@
 <script setup lang="ts">
+import { useCurrentChat } from "@/stores/current-chat";
 import TheMessage from "./TheMessage.vue";
-
-const messages = [
-  {
-    text: "123",
-    datetime: "19:21",
-    isMe: true,
-  },
-  {
-    text: "13134 1344131 34",
-    datetime: "19:22",
-    isMe: false,
-  },
-];
+const currentChat = useCurrentChat();
 </script>
 
 <template>
   <div class="h-[calc(100%-6.5rem)] overflow-auto scrollbar-hide">
     <TheMessage
-      v-for="(message, index) in messages"
-      :key="index"
+      v-for="message in currentChat.messages"
+      :key="message.id"
       :message="message"
     />
   </div>

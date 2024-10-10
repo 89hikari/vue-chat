@@ -1,17 +1,13 @@
 <script setup lang="ts">
+import type { IMessage } from "@/models/IMessage";
 import { computed, toRefs } from "vue";
 
-type Message = {
-  text: string;
-  datetime: string;
-  isMe: boolean;
-};
 interface Props {
-  message: Message;
+  message: IMessage;
 }
 
 const props = defineProps<Props>();
-const { text, datetime, isMe } = toRefs(props.message);
+const { message, time, isMe } = toRefs(props.message);
 
 const classes = computed(() =>
   isMe.value
@@ -26,8 +22,8 @@ const classes = computed(() =>
       class="max-w-[400px] p-3 pb-5 rounded-tl-2xl rounded-tr-2xl relative"
       :class="classes"
     >
-      <p>{{ text }}</p>
-      <span class="text-xs absolute right-3 text-gray-500">{{ datetime }}</span>
+      <p>{{ message }}</p>
+      <span class="text-xs absolute right-3 text-gray-500">{{ time }}</span>
     </div>
   </div>
 </template>
