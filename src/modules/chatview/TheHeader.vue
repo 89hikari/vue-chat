@@ -6,7 +6,7 @@ import AppIconButton from "@/components/AppIconButton.vue";
   <div class="bg-white shadow-lg px-6 py-2 flex align-center">
     <div
       style="background-color: aquamarine"
-      class="rounded-full w-12 h-12 mr-3 flex-shrink-0 online-indicator small"
+      class="rounded-full w-12 h-12 mr-3 flex-shrink-0 online-indicator small relative z-0"
     ></div>
     <div class="flex align-center justify-between flex-row w-full my-auto">
       <div class="flex-grow">
@@ -14,7 +14,7 @@ import AppIconButton from "@/components/AppIconButton.vue";
         <div class="text-sm">last seen...</div>
       </div>
       <div class="actions">
-        <AppIconButton type="pi-ellipsis-v" />
+        <AppIconButton icon="pi-ellipsis-v" />
       </div>
     </div>
   </div>

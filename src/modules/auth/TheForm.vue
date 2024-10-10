@@ -46,6 +46,7 @@ const submit = async () => {
       v-model="form.value"
       class="mb-1"
       @update:model-value="errorMessage = ''"
+      @keyup.enter="form?.type === 'password' && submit()"
     />
   </div>
   <AppErrorMessageString
