@@ -22,7 +22,7 @@ const classes = computed(() =>
       class="max-w-[400px] p-3 pb-5 rounded-tl-2xl rounded-tr-2xl relative"
       :class="classes"
     >
-      <p>{{ message }}</p>
+      <p class="whitespace-pre-line">{{ message }}</p>
       <span class="text-xs absolute right-3 text-gray-500">{{ time }}</span>
     </div>
   </div>

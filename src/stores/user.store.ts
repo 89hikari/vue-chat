@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import type { AxiosError } from "axios";
 import type { IMyUser } from "@/models/IUser";
 import type { IServerError } from "@/models/IServerError";
-import { post } from "@/helpers/api.helpers";
+import { get, post } from "@/helpers/api.helpers";
 import router from "@/router";
 
 const initialUser = () => ({
@@ -44,5 +44,15 @@ export const useUserStore = defineStore("user", () => {
     user.value = initialUser();
   };
 
-  return { user, login, logout };
+  const identificate = async () => {
+    const myUserData = (
+      await get({
+        controllerName: "users",
+        methodName: "self",
+      })
+    ).data as IMyUser["info"];
+    user.value.info = myUserData;
+  };
+
+  return { user, login, logout, identificate };
 });

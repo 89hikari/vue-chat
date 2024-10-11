@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import AppIconButton from "@/components/AppIconButton.vue";
+import { useCurrentChat } from "@/stores/current-chat";
+const currentChat = useCurrentChat();
 </script>
 
 <template>
@@ -10,7 +12,7 @@ import AppIconButton from "@/components/AppIconButton.vue";
     ></div>
     <div class="flex align-center justify-between flex-row w-full my-auto">
       <div class="flex-grow">
-        <div class="font-semibold">Name</div>
+        <div class="font-semibold">{{ currentChat.user?.name }}</div>
         <div class="text-sm">last seen...</div>
       </div>
       <div class="actions">

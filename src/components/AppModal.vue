@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import AppTransition from "./AppTransition.vue";
 
 const isOpen = ref<boolean>(false);
 const isModalVisible = computed(() => isOpen.value);
@@ -10,7 +11,7 @@ defineExpose({
 });
 </script>
 <template>
-  <transition name="fade">
+  <AppTransition>
     <div v-if="isModalVisible">
       <div @click="toggle" class="fixed bg-black opacity-70 inset-0 z-10"></div>
       <div
@@ -19,15 +20,5 @@ defineExpose({
         <slot />
       </div>
     </div>
-  </transition>
+  </AppTransition>
 </template>
-<style scoped>
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 300ms ease-in;
-}
-</style>

@@ -14,7 +14,7 @@ export default function () {
         sidebarMessages.currentChat === personId ||
         sidebarMessages.currentChat === undefined
       ) {
-        currentChat.getMessages(personId);
+        currentChat.getNewChatData(personId);
       }
       if (sidebarMessages.currentChat === undefined) {
         sidebarMessages.setCurrentChat(personId);
