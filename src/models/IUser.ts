@@ -5,6 +5,7 @@ export interface IUser {
   gender: string;
   createdAt?: string;
   updatedAt?: string;
+  isOnline?: boolean;
 }
 
 export interface IMyUser {

@@ -2,9 +2,17 @@
 import LeftPanel from "@/modules/left-panel/LeftPanel.vue";
 import TheChatview from "@/modules/chatview/TheChatview.vue";
 import { useUserStore } from "@/stores/user.store";
+import { watchEffect } from "vue";
 
 const userStore = useUserStore();
-!userStore.user.info?.id && userStore.identificate();
+
+watchEffect(() => {
+  if (userStore.user.info?.id) {
+    userStore.connectToWebsocket();
+  } else {
+    userStore.identificate();
+  }
+});
 </script>
 
 <template>

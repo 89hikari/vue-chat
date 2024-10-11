@@ -5,6 +5,12 @@ import type { IMyUser } from "@/models/IUser";
 import type { IServerError } from "@/models/IServerError";
 import { get, post } from "@/helpers/api.helpers";
 import router from "@/router";
+import useWebsocket from "@/composables/useWebsocket";
+import type { Socket } from "socket.io-client";
+import type { DefaultEventsMap } from "socket.io";
+import { useSidebarMessages } from "./sidebar-messages.store";
+import type { IConnection } from "@/models/IConnection";
+import { useCurrentChat } from "./current-chat";
 
 const initialUser = () => ({
   token: localStorage.getItem("token"),
@@ -13,7 +19,7 @@ const initialUser = () => ({
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<IMyUser>(initialUser());
-
+  let wSocket: Socket<DefaultEventsMap, DefaultEventsMap>;
   const login = async (name: string, password: string) => {
     return await post({
       controllerName: "auth",
@@ -54,5 +60,43 @@ export const useUserStore = defineStore("user", () => {
     user.value.info = myUserData;
   };
 
-  return { user, login, logout, identificate };
+  const connectToWebsocket = () => {
+    if (user.value.info?.id) {
+      wSocket = useWebsocket().getWebsocket();
+      wSocket.on("connect", () => {
+        wSocket.emit("initUser", {
+          userId: user.value.info?.id,
+        });
+      });
+      const newUserConnectedCallback = (payload: IConnection) => {
+        const sidebarMessages = useSidebarMessages();
+        sidebarMessages.setPersonOnline(payload, true);
+        const currentChat = useCurrentChat();
+        currentChat.setPersonOnline(payload, true);
+      };
+      const userDisconnectedCallback = (payload: IConnection) => {
+        const sidebarMessages = useSidebarMessages();
+        sidebarMessages.setPersonOnline(payload, false);
+        const currentChat = useCurrentChat();
+        currentChat.setPersonOnline(payload, false);
+      };
+      const connectedPeersCallback = (payload: IConnection[]) => {
+        const sidebarMessages = useSidebarMessages();
+        sidebarMessages.setPersonsOnline(payload);
+        const currentChat = useCurrentChat();
+        currentChat.setPersonsOnline(payload);
+      };
+      wSocket
+        .off("newUserConnected", newUserConnectedCallback)
+        .on("newUserConnected", newUserConnectedCallback);
+      wSocket
+        .off("userDisconnected", userDisconnectedCallback)
+        .on("userDisconnected", userDisconnectedCallback);
+      wSocket
+        .off("connectedPeers", connectedPeersCallback)
+        .on("connectedPeers", connectedPeersCallback);
+    }
+  };
+
+  return { user, login, logout, identificate, connectToWebsocket };
 });

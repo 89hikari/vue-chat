@@ -8,7 +8,8 @@ const currentChat = useCurrentChat();
   <div class="bg-white shadow-lg px-6 py-2 flex align-center">
     <div
       style="background-color: aquamarine"
-      class="rounded-full w-12 h-12 mr-3 flex-shrink-0 online-indicator small relative z-0"
+      class="rounded-full w-12 h-12 mr-3 flex-shrink-0 small relative z-0"
+      :class="{ 'online-indicator': currentChat.user?.isOnline }"
     ></div>
     <div class="flex align-center justify-between flex-row w-full my-auto">
       <div class="flex-grow">

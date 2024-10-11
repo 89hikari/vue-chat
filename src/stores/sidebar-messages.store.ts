@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { get } from "@/helpers/api.helpers";
 import type { ILastMessage } from "@/models/IIsdebar";
 import router from "@/router";
+import type { IConnection } from "@/models/IConnection";
 
 export const useSidebarMessages = defineStore("sidebarMessages", () => {
   const loaded = ref<boolean>(false);
@@ -15,6 +16,7 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
         controllerName: "messages",
       })
     ).data;
+    messages.value.forEach((el) => (el.key = el.id));
     loaded.value = true;
   };
 
@@ -23,11 +25,34 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     router.push(`/chat/${personId}`);
   };
 
+  const setPersonOnline = (person: IConnection, isOnline: boolean) => {
+    const onlineUser = messages.value.find(
+      (el) => el.personId === person.userId
+    );
+    if (onlineUser) {
+      onlineUser.isOnline = isOnline;
+      onlineUser.key++; // to re-render
+    }
+  };
+
+  const setPersonsOnline = (personIds: IConnection[]) => {
+    const onlineUsers = messages.value.filter(
+      (el) =>
+        personIds.findIndex((elPer) => elPer.userId === el.personId) !== -1
+    );
+    onlineUsers.forEach((el) => {
+      el.isOnline = true;
+      el.key++; // to re-render
+    });
+  };
+
   return {
     loaded,
     getMessages,
     messages,
     currentChat: readonly(currentChat),
     setCurrentChat,
+    setPersonOnline,
+    setPersonsOnline,
   };
 });

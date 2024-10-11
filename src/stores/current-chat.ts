@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { get, post } from "@/helpers/api.helpers";
 import type { IMessage } from "@/models/IMessage";
 import type { IUser } from "@/models/IUser";
+import type { IConnection } from "@/models/IConnection";
 
 export const useCurrentChat = defineStore("currentChat", () => {
   const loaded = ref<boolean>(true);
@@ -40,6 +41,20 @@ export const useCurrentChat = defineStore("currentChat", () => {
     });
   };
 
+  const setPersonOnline = (person: IConnection, isOnline: boolean) => {
+    if (user.value?.id === person.userId) {
+      user.value.isOnline = isOnline;
+    }
+  };
+
+  const setPersonsOnline = (personIds: IConnection[]) => {
+    if (
+      user.value &&
+      personIds.findIndex((el) => el.userId === user.value?.id) !== -1
+    )
+      user.value.isOnline = true;
+  };
+
   return {
     loaded,
     getNewChatData,
@@ -47,5 +62,7 @@ export const useCurrentChat = defineStore("currentChat", () => {
     user,
     currentMessage,
     sendMessage,
+    setPersonOnline,
+    setPersonsOnline,
   };
 });
