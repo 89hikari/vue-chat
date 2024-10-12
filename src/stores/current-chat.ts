@@ -4,11 +4,13 @@ import { get, post } from "@/helpers/api.helpers";
 import type { IMessage } from "@/models/IMessage";
 import type { IUser } from "@/models/IUser";
 import type { IConnection } from "@/models/IConnection";
+import { useWebsocketsStore } from "./websockets.store";
+import type { INewMessage } from "@/models/INewMessage";
 
 export const useCurrentChat = defineStore("currentChat", () => {
   const loaded = ref<boolean>(true);
   const messages = ref<IMessage[]>([]);
-  const currentMessage = ref<string>();
+  const currentMessage = ref<string>("");
   const user = ref<IUser>();
   const getNewChatData = async (id: number) => {
     messages.value = [];
@@ -30,15 +32,19 @@ export const useCurrentChat = defineStore("currentChat", () => {
   };
 
   const sendMessage = async () => {
-    await post({
-      controllerName: "messages",
-      queryParams: {
-        message: currentMessage.value,
-        receiverId: user.value?.id,
-      },
-    }).then(() => {
-      currentMessage.value = "";
-    });
+    currentMessage.value &&
+      (await post({
+        controllerName: "messages",
+        queryParams: {
+          message: currentMessage.value,
+          receiverId: user.value?.id,
+        },
+      }).then(() => {
+        const websocketStore = useWebsocketsStore();
+        user.value?.id &&
+          websocketStore.emitMessage(currentMessage.value, user.value?.id);
+        currentMessage.value = "";
+      }));
   };
 
   const setPersonOnline = (person: IConnection, isOnline: boolean) => {
@@ -55,6 +61,25 @@ export const useCurrentChat = defineStore("currentChat", () => {
       user.value.isOnline = true;
   };
 
+  const handleNewMessage = (payload: INewMessage) => {
+    if (payload) {
+      if (
+        payload.receiverId === user.value?.id ||
+        payload.senderInfo.id === user.value?.id
+      ) {
+        messages.value.push({
+          id: payload.messageId,
+          isMe: payload.self,
+          message: payload.message,
+          receiverId: payload.receiverId,
+          senderId: payload.senderInfo.id,
+          date: payload.date,
+          time: payload.date,
+        });
+      }
+    }
+  };
+
   return {
     loaded,
     getNewChatData,
@@ -64,5 +89,6 @@ export const useCurrentChat = defineStore("currentChat", () => {
     sendMessage,
     setPersonOnline,
     setPersonsOnline,
+    handleNewMessage,
   };
 });

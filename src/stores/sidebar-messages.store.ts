@@ -4,6 +4,9 @@ import { get } from "@/helpers/api.helpers";
 import type { ILastMessage } from "@/models/IIsdebar";
 import router from "@/router";
 import type { IConnection } from "@/models/IConnection";
+import { getRandomID } from "@/helpers/random.helper";
+import type { INewMessage } from "@/models/INewMessage";
+// import { useUserStore } from "./user.store";
 
 export const useSidebarMessages = defineStore("sidebarMessages", () => {
   const loaded = ref<boolean>(false);
@@ -31,7 +34,7 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     );
     if (onlineUser) {
       onlineUser.isOnline = isOnline;
-      onlineUser.key++; // to re-render
+      onlineUser.key = getRandomID();
     }
   };
 
@@ -42,8 +45,34 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     );
     onlineUsers.forEach((el) => {
       el.isOnline = true;
-      el.key++; // to re-render
+      el.key = getRandomID();
     });
+  };
+
+  const handleNewMessage = (payload: INewMessage) => {
+    const existedPeer = messages.value.find(
+      (el) =>
+        el.personId === payload.receiverId ||
+        el.personId === payload.senderInfo.id
+    );
+    if (existedPeer) {
+      existedPeer.message = payload.message;
+      const arraPeerId = messages.value.findIndex(
+        (el) => el.personId === existedPeer.personId
+      );
+      messages.value.splice(arraPeerId, 1);
+      messages.value = [existedPeer, ...messages.value];
+      existedPeer.key = getRandomID();
+    } else {
+      // const userStore = useUserStore();
+      // messages.value.push({
+      //   id: payload.messageId,
+      //   date: payload.date,
+      //   key: payload.messageId,
+      //   message: payload.message,
+      //   personId: userStore.user.info?.id === payload.receiverId ? payload.senderInfo.id : payload.
+      // })
+    }
   };
 
   return {
@@ -54,5 +83,6 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     setCurrentChat,
     setPersonOnline,
     setPersonsOnline,
+    handleNewMessage,
   };
 });
