@@ -48,8 +48,8 @@ export const useUserStore = defineStore("user", () => {
       await get({
         controllerName: "users",
         methodName: "self",
-      })
-    ).data as IMyUser["info"];
+      }).catch(() => logout())
+    )?.data as IMyUser["info"];
     user.value.info = myUserData;
   };
 

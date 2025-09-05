@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import useDate from "@/composables/useDate";
 import type { IMessage } from "@/models/IMessage";
 import { computed, toRefs } from "vue";
 
@@ -7,7 +8,9 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const { message, time, isMe } = toRefs(props.message);
+const { message, createdAt, isMe } = toRefs(props.message);
+
+const { localDate } = useDate(createdAt.value);
 
 const classes = computed(() =>
   isMe.value
@@ -23,7 +26,9 @@ const classes = computed(() =>
       :class="classes"
     >
       <p class="whitespace-pre-line">{{ message }}</p>
-      <span class="text-xs absolute right-3 text-gray-500">{{ time }}</span>
+      <span class="text-xs absolute right-3 text-gray-500">{{
+        localDate
+      }}</span>
     </div>
   </div>
 </template>

@@ -6,7 +6,8 @@ import router from "@/router";
 import type { IConnection } from "@/models/IConnection";
 import { getRandomID } from "@/helpers/random.helper";
 import type { INewMessage } from "@/models/INewMessage";
-// import { useUserStore } from "./user.store";
+import type { IUserListItem } from "@/models/IUser";
+import { useCurrentChat } from "./current-chat";
 
 export const useSidebarMessages = defineStore("sidebarMessages", () => {
   const loaded = ref<boolean>(false);
@@ -22,6 +23,15 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     messages.value.forEach((el) => (el.key = el.id));
     loaded.value = true;
   };
+
+  const getUsers = async (search: string) =>
+    await get({
+      controllerName: "users",
+      queryParams: {
+        search,
+        limit: 10,
+      },
+    }).then((result) => result.data as IUserListItem[]);
 
   const setCurrentChat = (personId: number) => {
     currentChat.value = personId;
@@ -57,6 +67,7 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     );
     if (existedPeer) {
       existedPeer.message = payload.message;
+      existedPeer.date = payload.date;
       const arraPeerId = messages.value.findIndex(
         (el) => el.personId === existedPeer.personId
       );
@@ -64,14 +75,23 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
       messages.value = [existedPeer, ...messages.value];
       existedPeer.key = getRandomID();
     } else {
-      // const userStore = useUserStore();
-      // messages.value.push({
-      //   id: payload.messageId,
-      //   date: payload.date,
-      //   key: payload.messageId,
-      //   message: payload.message,
-      //   personId: userStore.user.info?.id === payload.receiverId ? payload.senderInfo.id : payload.
-      // })
+      const currentChatInfo = useCurrentChat();
+      messages.value = [
+        {
+          id: payload.messageId,
+          date: payload.date,
+          key: payload.messageId,
+          message: payload.message,
+          personId: payload.self
+            ? currentChatInfo.user!.id
+            : payload.senderInfo.id,
+          personName: payload.self
+            ? currentChatInfo.user!.name
+            : payload.senderInfo.name,
+          isOnline: true,
+        },
+        ...messages.value,
+      ];
     }
   };
 
@@ -84,5 +104,6 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     setPersonOnline,
     setPersonsOnline,
     handleNewMessage,
+    getUsers,
   };
 });

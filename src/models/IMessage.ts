@@ -3,7 +3,6 @@ export interface IMessage {
   message: string;
   senderId: number;
   receiverId: number;
-  date: string;
-  time: string;
+  createdAt: string;
   isMe: boolean;
 }

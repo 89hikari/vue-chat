@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import useDate from "@/composables/useDate";
 import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import { toRefs } from "vue";
 
@@ -17,6 +18,8 @@ interface Props {
 const sidebarMessages = useSidebarMessages();
 const props = defineProps<Props>();
 const { personId, personName, message, date, isOnline } = toRefs(props.chat);
+
+const { localDate } = useDate(date.value);
 </script>
 
 <template>
@@ -35,7 +38,7 @@ const { personId, personName, message, date, isOnline } = toRefs(props.chat);
     <div class="w-[calc(100%-4.25rem)]">
       <div class="flex align-center justify-between">
         <p class="font-semibold text-base">{{ personName }}</p>
-        <span class="text-xs">{{ date }}</span>
+        <span class="text-xs">{{ localDate }}</span>
       </div>
       <p class="text-base font-light truncate">
         {{ message }}

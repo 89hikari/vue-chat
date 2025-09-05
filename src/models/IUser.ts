@@ -12,3 +12,9 @@ export interface IMyUser {
   token: string | null;
   info: IUser | null;
 }
+
+export interface IUserListItem extends Pick<IUser, "id" | "email" | "name"> {
+  id: number;
+  email: string;
+  name: string;
+}

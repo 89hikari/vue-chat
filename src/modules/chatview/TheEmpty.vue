@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center justify-center flex-col flex-1">
+  <div
+    class="flex items-center justify-center flex-col flex-1 h-[calc(100%-6.5rem)] overflow-auto"
+  >
     <div
       class="flex items-center flex-col w-max bg-white rounded-lg shadow-md p-6"
     >

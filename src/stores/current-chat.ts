@@ -73,8 +73,7 @@ export const useCurrentChat = defineStore("currentChat", () => {
           message: payload.message,
           receiverId: payload.receiverId,
           senderId: payload.senderInfo.id,
-          date: payload.date,
-          time: payload.date,
+          createdAt: payload.date,
         });
       }
     }

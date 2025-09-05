@@ -1,7 +1,7 @@
 import type { IUser } from "./IUser";
 
 export interface INewMessage {
-  messageId: number | string;
+  messageId: number;
   message: string;
   date: string;
   receiverId: number;
