@@ -12,7 +12,8 @@ Existing features:
 - uploading avatar which is visible to anyone
 - chatting
   \
-  TODO: - edit profile
+  TODO:
+- edit profile
 - edit avatar
 - load more messages (now it's just last 30 shown)
 - more info to profile
