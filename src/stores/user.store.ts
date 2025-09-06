@@ -53,5 +53,18 @@ export const useUserStore = defineStore("user", () => {
     user.value.info = myUserData;
   };
 
-  return { user, login, logout, identificate };
+  const uploadAvatar = async (formData: FormData) => {
+    formData.append("id", String(user.value.info?.id));
+    return await post({
+      controllerName: "users",
+      methodName: "upload-avatar",
+      queryParams: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then((response) => {
+      user.value.info!.hasAvatar = true;
+      return response;
+    });
+  };
+
+  return { user, login, logout, identificate, uploadAvatar };
 });

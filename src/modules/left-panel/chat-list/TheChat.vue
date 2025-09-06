@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppAvatar from "@/components/AppAvatar.vue";
+import AppAvatarPlaceholder from "@/components/AppAvatarPlaceholder.vue";
 import useDate from "@/composables/useDate";
 import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import { toRefs } from "vue";
@@ -10,6 +12,7 @@ type Chat = {
   message: string;
   date: string;
   isOnline?: boolean;
+  hasAvatar?: boolean;
 };
 interface Props {
   chat: Chat;
@@ -17,7 +20,9 @@ interface Props {
 
 const sidebarMessages = useSidebarMessages();
 const props = defineProps<Props>();
-const { personId, personName, message, date, isOnline } = toRefs(props.chat);
+const { personId, personName, message, date, isOnline, hasAvatar } = toRefs(
+  props.chat
+);
 
 const { localDate } = useDate(date.value);
 </script>
@@ -25,16 +30,18 @@ const { localDate } = useDate(date.value);
 <template>
   <div
     @click="sidebarMessages.setCurrentChat(personId)"
-    class="p-2 flex items-center hover:bg-gray-100 cursor-pointer transition ease-in-out duration-200 rounded-lg w-full"
+    class="p-2 flex items-center hover:bg-gray-100 cursor-pointer transition ease-in-out duration-200 rounded-lg w-full mt-1"
     :class="{
       '!bg-blue-400 !text-white': personId === sidebarMessages.currentChat,
     }"
   >
-    <div
-      style="background-color: aquamarine"
-      class="rounded-full w-14 h-14 mr-3 flex-shrink-0"
-      :class="{ 'online-indicator': isOnline }"
-    ></div>
+    <AppAvatarPlaceholder
+      :is-online="isOnline"
+      :name="personName"
+      v-if="!hasAvatar"
+    />
+    <AppAvatar v-else :id="personId" :size="12" class="mr-3" />
+
     <div class="w-[calc(100%-4.25rem)]">
       <div class="flex align-center justify-between">
         <p class="font-semibold text-base">{{ personName }}</p>

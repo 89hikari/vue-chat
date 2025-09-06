@@ -6,6 +6,8 @@ export interface IUser {
   createdAt?: string;
   updatedAt?: string;
   isOnline?: boolean;
+  lastSeenAt?: string;
+  hasAvatar?: boolean;
 }
 
 export interface IMyUser {

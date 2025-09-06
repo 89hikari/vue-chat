@@ -6,4 +6,5 @@ export interface ILastMessage {
   personId: number;
   date: string;
   isOnline?: boolean;
+  hasAvatar: boolean;
 }

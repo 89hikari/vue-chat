@@ -89,6 +89,7 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
             ? currentChatInfo.user!.name
             : payload.senderInfo.name,
           isOnline: true,
+          hasAvatar: !!currentChatInfo.user!.hasAvatar,
         },
         ...messages.value,
       ];

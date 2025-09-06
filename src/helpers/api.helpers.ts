@@ -6,6 +6,7 @@ interface IRequestParams {
   controllerName: string;
   methodName?: string;
   queryParams?: object;
+  headers?: object;
 }
 
 export const post = async (params: IRequestParams) =>
@@ -15,6 +16,7 @@ export const post = async (params: IRequestParams) =>
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        ...params.headers,
       },
     }
   );
@@ -31,6 +33,7 @@ export const get = async (params: IRequestParams) =>
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        ...params.headers,
       },
     }
   );
