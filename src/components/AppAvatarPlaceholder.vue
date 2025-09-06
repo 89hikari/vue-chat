@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { stringToGradient } from "@/helpers/styles.helper";
 import { computed } from "vue";
+
 interface Props {
   name: string;
   isOnline?: boolean;
 }
+
 const props = defineProps<Props>();
 
 const nameShown = computed(() =>

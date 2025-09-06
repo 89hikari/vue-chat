@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import TheChat from "./TheChat.vue";
+import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import { storeToRefs } from "pinia";
 
 const messagesStore = useSidebarMessages();

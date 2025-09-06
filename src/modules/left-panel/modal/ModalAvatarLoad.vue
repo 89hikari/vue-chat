@@ -31,6 +31,7 @@ watch(avatarFile, async () => {
   <div>
     <AppFileUpload
       v-model="avatarFile"
+      button-name="Upload new avatar"
       :placeholder="user.user.info?.hasAvatar"
       :name="user.user.info?.name"
       :initial-url="existingAvatar"

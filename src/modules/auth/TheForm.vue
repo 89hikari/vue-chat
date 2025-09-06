@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import AppInput from "@/components/AppInput.vue";
 import AppFormSubmitButton from "@/components/AppFormSubmitButton.vue";
-import type { ICommonForm } from "@/models/IForm";
-import { useUserStore } from "@/stores/user.store";
 import AppErrorMessageString from "@/components/AppErrorMessageString.vue";
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user.store";
+import type { ICommonForm } from "@/models/IForm";
 
 const errorMessage = ref<string>();
 const userStore = useUserStore();

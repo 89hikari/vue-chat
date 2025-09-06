@@ -76,18 +76,17 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
       existedPeer.key = getRandomID();
     } else {
       const currentChatInfo = useCurrentChat();
+      const personInfo = payload.self
+        ? currentChatInfo.user!
+        : payload.senderInfo;
       messages.value = [
         {
           id: payload.messageId,
           date: payload.date,
           key: payload.messageId,
           message: payload.message,
-          personId: payload.self
-            ? currentChatInfo.user!.id
-            : payload.senderInfo.id,
-          personName: payload.self
-            ? currentChatInfo.user!.name
-            : payload.senderInfo.name,
+          personId: personInfo.id,
+          personName: personInfo.name,
           isOnline: true,
           hasAvatar: !!currentChatInfo.user!.hasAvatar,
         },

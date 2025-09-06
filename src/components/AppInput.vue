@@ -49,7 +49,7 @@ watch(modelValue, (q) => {
   debounceTimer = window.setTimeout(async () => {
     loading.value = true;
     try {
-      results.value = await props.fetchResults(q);
+      if (props.fetchResults) results.value = await props.fetchResults(q);
       listOpen.value = true;
     } catch (e) {
       console.error(e);

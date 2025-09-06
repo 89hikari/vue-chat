@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import AppErrorMessageString from "@/components/AppErrorMessageString.vue";
 import AppInput from "@/components/AppInput.vue";
 import AppFormSubmitButton from "@/components/AppFormSubmitButton.vue";
+import TheVerify from "./TheVerify.vue";
 import useValidation from "@/composables/useValidation";
 import {
   emailValidator,
@@ -12,7 +12,7 @@ import {
 } from "@/helpers/valudators.helpers";
 import type { ICommonForm } from "@/models/IForm";
 import { useRegistrationStore } from "@/stores/registration.store";
-import TheVerify from "./TheVerify.vue";
+import { ref } from "vue";
 
 const store = useRegistrationStore();
 const errorMessage = ref<string>();

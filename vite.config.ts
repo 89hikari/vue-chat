@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     envDir: "./",
+    base: "/vue-chat/",
     define: {
       __SERVER_URL__: JSON.stringify(serverURL.toString()),
       __API_PATH__: JSON.stringify(serverAPIPath),

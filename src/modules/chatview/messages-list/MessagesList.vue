@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import TheMessage from "./TheMessage.vue";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useCurrentChat } from "@/stores/current-chat";
-import TheMessage from "./TheMessage.vue";
 
 const currentChat = useCurrentChat();
 const scrollContainer = ref<HTMLElement | null>(null);

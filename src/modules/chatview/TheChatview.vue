@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import useChat from "@/composables/useChat";
+import AppTransition from "@/components/AppTransition.vue";
+import AppTextarea from "@/components/AppTextarea.vue";
 import TheHeader from "./TheHeader.vue";
 import MessagesList from "./messages-list/MessagesList.vue";
 import TheEmpty from "./TheEmpty.vue";
+import useChat from "@/composables/useChat";
 import { useCurrentChat } from "@/stores/current-chat";
-import AppTransition from "@/components/AppTransition.vue";
-import AppTextarea from "@/components/AppTextarea.vue";
 import { computed } from "vue";
 
 useChat().watchCurrentChat();

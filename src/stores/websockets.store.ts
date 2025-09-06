@@ -11,6 +11,12 @@ import type { INewMessage } from "@/models/INewMessage";
 export const useWebsocketsStore = defineStore("websockets", () => {
   let wSocket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
+  const toggleCallback = (
+    streamName: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (...args: any[]) => void
+  ) => wSocket.off(streamName, callback).on(streamName, callback);
+
   const connectToWebsocket = () => {
     const userStore = useUserStore();
     const user = userStore.user;
@@ -45,18 +51,10 @@ export const useWebsocketsStore = defineStore("websockets", () => {
         const currentChat = useCurrentChat();
         currentChat.handleNewMessage(payload);
       };
-      wSocket
-        .off("newUserConnected", newUserConnectedCallback)
-        .on("newUserConnected", newUserConnectedCallback);
-      wSocket
-        .off("userDisconnected", userDisconnectedCallback)
-        .on("userDisconnected", userDisconnectedCallback);
-      wSocket
-        .off("connectedPeers", connectedPeersCallback)
-        .on("connectedPeers", connectedPeersCallback);
-      wSocket
-        .off("newMessage", newMessageCallback)
-        .on("newMessage", newMessageCallback);
+      toggleCallback("newUserConnected", newUserConnectedCallback);
+      toggleCallback("userDisconnected", userDisconnectedCallback);
+      toggleCallback("connectedPeers", connectedPeersCallback);
+      toggleCallback("newMessage", newMessageCallback);
     }
   };
 

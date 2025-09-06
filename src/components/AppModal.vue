@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import AppTransition from "./AppTransition.vue";
+import { computed, ref } from "vue";
 
 const isOpen = ref<boolean>(false);
 const isModalVisible = computed(() => isOpen.value);

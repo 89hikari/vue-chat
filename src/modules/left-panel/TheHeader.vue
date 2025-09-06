@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import AppInput from "@/components/AppInput.vue";
 import AppIconButton from "@/components/AppIconButton.vue";
 import AppModal from "@/components/AppModal.vue";
 import ModalContent from "./modal/ModalContent.vue";
+import { ref } from "vue";
 import { useSidebarMessages } from "@/stores/sidebar-messages.store";
 import type { IUserListItem } from "@/models/IUser";
 
