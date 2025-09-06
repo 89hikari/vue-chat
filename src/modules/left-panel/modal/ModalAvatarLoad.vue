@@ -10,7 +10,7 @@ const isTooLarge = ref(false);
 const version = ref(Date.now());
 
 const existingAvatar = computed(
-  () => `/api/users/${user.user.info?.id}/avatar?v=${version.value}`
+  () => `/vue-chat/api/users/${user.user.info?.id}/avatar?v=${version.value}`
 );
 
 watch(avatarFile, async () => {

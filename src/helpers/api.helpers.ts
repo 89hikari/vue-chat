@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiPrefix = import.meta.env.VITE_SERVER_API_PATH || "/api/";
+const apiPrefix = import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
 
 interface IRequestParams {
   controllerName: string;

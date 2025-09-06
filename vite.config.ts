@@ -8,11 +8,10 @@ export default defineConfig(({ mode }) => {
   const envars = loadEnv(mode, "./");
 
   const serverURL = new URL(envars.VITE_SERVER_URL ?? "http://localhost:5000");
-  const serverAPIPath = envars.VITE_SERVER_API_PATH ?? "/api";
+  const serverAPIPath = envars.VITE_SERVER_API_PATH ?? "/vue-chat/api";
 
   return {
     envDir: "./",
-    base: "/vue-chat/",
     define: {
       __SERVER_URL__: JSON.stringify(serverURL.toString()),
       __API_PATH__: JSON.stringify(serverAPIPath),

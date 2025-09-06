@@ -16,7 +16,7 @@ const classNames = computed(() => ({
 <template>
   <div :class="[classNames]">
     <img
-      :src="url || `/api/users/${id}/avatar`"
+      :src="url || `/vue-chat/api/users/${id}/avatar`"
       alt="User Avatar"
       class="w-full h-full rounded-full object-cover"
     />
