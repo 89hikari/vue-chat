@@ -14,7 +14,7 @@ Existing features:
   \
   TODO:
 - edit profile
-- edit avatar
+- edit avatar --- DONE
 - load more messages (now it's just last 30 shown)
 - more info to profile
 - check user info
