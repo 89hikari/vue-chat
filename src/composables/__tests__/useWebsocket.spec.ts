@@ -1,20 +1,30 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 
 // Mock socket.io-client
-const mockSocket = () => {
-  const events: Record<string, any[]> = {};
+type MockHandler = (payload?: unknown) => void;
+interface MockSocket {
+  connect: Mock;
+  disconnect: Mock;
+  on: Mock;
+  off: Mock;
+  removeAllListeners: Mock;
+  emit: Mock;
+  connected: boolean;
+}
+
+const mockSocket = (): MockSocket => {
+  const events: Record<string, MockHandler[]> = {};
   return {
-    connect: vi.fn(function (this: any) {
-      (this as any).connected = true;
+    connect: vi.fn(function (this: MockSocket) {
+      this.connected = true;
     }),
-    disconnect: vi.fn(function (this: any) {
-      (this as any).connected = false;
+    disconnect: vi.fn(function (this: MockSocket) {
+      this.connected = false;
     }),
-    on: vi.fn((ev: string, h: any) => {
+    on: vi.fn((ev: string, h: MockHandler) => {
       (events[ev] = events[ev] || []).push(h);
     }),
-    off: vi.fn((ev: string, h?: any) => {
+    off: vi.fn((ev: string, h?: MockHandler) => {
       if (!h) delete events[ev];
       else events[ev] = (events[ev] || []).filter((fn) => fn !== h);
     }),
@@ -22,7 +32,7 @@ const mockSocket = () => {
       if (ev) delete events[ev];
       else for (const k in events) delete events[k];
     }),
-    emit: vi.fn((ev: string, payload?: any) => {
+    emit: vi.fn((ev: string, payload?: unknown) => {
       (events[ev] || []).forEach((fn) => fn(payload));
     }),
     connected: false,
@@ -47,10 +57,10 @@ describe("useWebsocket", () => {
     expect(s1).toBe(s2);
 
     ws.connect();
-    expect((s1 as any).connected).toBe(true);
+    expect((s1 as unknown as MockSocket).connected).toBe(true);
 
     ws.disconnect();
-    expect((s1 as any).connected).toBe(false);
+    expect((s1 as unknown as MockSocket).connected).toBe(false);
   });
 
   it("disconnect removes listeners and nulls instance", () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 
 vi.mock("axios", () => {
   const requestInterceptors = { use: vi.fn() };
@@ -45,10 +45,9 @@ describe("api.client", () => {
   });
 
   it("attaches Authorization header via interceptor", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const axiosModule: any = axios;
+    const axiosModule = axios as unknown as { create: Mock };
     expect(axiosModule.create).toHaveBeenCalled();
-    const created = axiosModule.create.mock.results[0].value;
+    const created = (axiosModule.create as Mock).mock.results[0].value;
     expect(created.interceptors.request.use).toHaveBeenCalled();
   });
 });
