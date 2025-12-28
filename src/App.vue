@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AppTransition from "./components/AppTransition.vue";
-import useAuthentificated from "./composables/useAuthentificated";
+import useAuthenticated from "./composables/useAuthenticated";
 
 // Calling composable function to run checks of user auth
-useAuthentificated().watchAuth();
+useAuthenticated().watchAuth();
 </script>
 
 <template>

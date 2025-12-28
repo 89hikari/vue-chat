@@ -6,7 +6,8 @@ import type { IUser } from "@/models/IUser";
 import type { IConnection } from "@/models/IConnection";
 import { useWebsocketsStore } from "./websockets.store";
 import type { INewMessage } from "@/models/INewMessage";
-
+import usePresence from "@/composables/usePresence";
+import useMessagesList from "@/composables/useMessagesList";
 export const useCurrentChat = defineStore("currentChat", () => {
   const loaded = ref<boolean>(true);
   const messages = ref<IMessage[]>([]);
@@ -47,36 +48,19 @@ export const useCurrentChat = defineStore("currentChat", () => {
       }));
   };
 
+  const presence = usePresence();
+  const messagesList = useMessagesList();
+
   const setPersonOnline = (person: IConnection, isOnline: boolean) => {
-    if (user.value?.id === person.userId) {
-      user.value.isOnline = isOnline;
-    }
+    presence.setPersonOnlineInUser(user, person, isOnline);
   };
 
   const setPersonsOnline = (personIds: IConnection[]) => {
-    if (
-      user.value &&
-      personIds.findIndex((el) => el.userId === user.value?.id) !== -1
-    )
-      user.value.isOnline = true;
+    presence.setPersonsOnlineInUser(user, personIds);
   };
 
   const handleNewMessage = (payload: INewMessage) => {
-    if (payload) {
-      if (
-        payload.receiverId === user.value?.id ||
-        payload.senderInfo.id === user.value?.id
-      ) {
-        messages.value.push({
-          id: payload.messageId,
-          isMe: payload.self,
-          message: payload.message,
-          receiverId: payload.receiverId,
-          senderId: payload.senderInfo.id,
-          createdAt: payload.date,
-        });
-      }
-    }
+    messagesList.handleNewMessageInChat(messages, payload, user);
   };
 
   return {

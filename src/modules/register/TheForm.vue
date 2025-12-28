@@ -9,7 +9,7 @@ import {
   passwordConfirmationValidator,
   passwordValidator,
   usernameValidator,
-} from "@/helpers/valudators.helpers";
+} from "@/helpers/validators.helpers";
 import type { ICommonForm } from "@/models/IForm";
 import { useRegistrationStore } from "@/stores/registration.store";
 import { ref } from "vue";

@@ -12,7 +12,7 @@ watchEffect(() => {
   if (userStore.user.info?.id) {
     websocketStore.connectToWebsocket();
   } else {
-    userStore.identificate();
+    userStore.identify();
   }
 });
 </script>
