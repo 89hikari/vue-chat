@@ -1,7 +1,6 @@
 import { io, type Socket } from "socket.io-client";
 
-const serverURL =
-  import.meta.env.VITE_BACKEND_PROTOCOL || "http://localhost:5000";
+const serverURL = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
 
 let socket: Socket | null = null;
 
