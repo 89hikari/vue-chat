@@ -11,13 +11,14 @@ const click = () => emit("click");
 </script>
 
 <template>
-  <div
-    @click="click"
-    class="flex items-center justify-center hover:bg-gray-100 rounded-full cursor-pointer transition ease-in-out duration-200 p-3"
-  >
-    <button class="flex">
+  <div @click="click" class="flex items-center">
+    <button
+      type="button"
+      class="flex items-center justify-center w-10 h-10 rounded-full text-neon-cyan hover:bg-neon-cyan/10 focus:outline-none focus:ring-2 focus:ring-neon-cyan/30 transition-colors duration-150"
+      aria-label="menu"
+    >
       <i class="pi" :class="icon"></i>
     </button>
-    <p class="ml-2" v-if="text">{{ text }}</p>
+    <p class="ml-2 text-neon-cyan" v-if="text">{{ text }}</p>
   </div>
 </template>

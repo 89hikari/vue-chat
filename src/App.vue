@@ -7,9 +7,11 @@ useAuthenticated().watchAuth();
 </script>
 
 <template>
-  <router-view v-slot="{ Component }">
-    <AppTransition>
-      <component :is="Component" />
-    </AppTransition>
-  </router-view>
+  <div class="min-h-screen bg-gradient-cosmic">
+    <router-view v-slot="{ Component }">
+      <AppTransition>
+        <component :is="Component" />
+      </AppTransition>
+    </router-view>
+  </div>
 </template>

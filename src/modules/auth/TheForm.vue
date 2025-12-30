@@ -12,12 +12,12 @@ const userStore = useUserStore();
 const formRef = ref<ICommonForm>({
   username: {
     value: "",
-    placeholder: "Type here",
+    placeholder: "Enter your username or email",
     label: "Username or e-mail",
   },
   password: {
     value: "",
-    placeholder: "Type here",
+    placeholder: "Enter your password",
     label: "Password",
     type: "password",
   },
@@ -34,25 +34,23 @@ const submit = async () => {
 </script>
 
 <template>
-  <div
-    class="mb-3 w-full max-w-[400px]"
-    v-for="(form, key) in formRef"
-    :key="key"
-  >
-    <AppInput
-      :placeholder="form.placeholder"
-      :label="form.label"
-      :type="form?.type"
-      v-model="form.value"
-      class="mb-1"
-      @update:model-value="errorMessage = ''"
-      @keyup.enter="form?.type === 'password' && submit()"
+  <div class="w-full max-w-[400px] space-y-6">
+    <div class="mb-4 w-full" v-for="(form, key) in formRef" :key="key">
+      <AppInput
+        :placeholder="form.placeholder"
+        :label="form.label"
+        :type="form?.type"
+        v-model="form.value"
+        class="mb-2 transition-glow duration-300"
+        @update:model-value="errorMessage = ''"
+        @keyup.enter="form?.type === 'password' && submit()"
+      />
+    </div>
+    <AppErrorMessageString
+      v-if="errorMessage"
+      :text="errorMessage"
+      class="mb-5 text-neon-pink animate-fade-in"
     />
+    <AppFormSubmitButton @submit="submit" />
   </div>
-  <AppErrorMessageString
-    v-if="errorMessage"
-    :text="errorMessage"
-    class="mb-5"
-  />
-  <AppFormSubmitButton @submit="submit" />
 </template>

@@ -5,27 +5,175 @@
 // Montserrat
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+/* Cosmic Background */
 body {
+  margin: 0;
+  padding: 0;
   font-family: "Montserrat", sans-serif;
-  background-image: url("../images/bg1.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a0033 50%, #0a0e27 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #e0e6ff;
+
   &::before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url("../images/bg2.png");
-    background-position: top right;
-    background-size: 510px auto;
+    background-image:
+      radial-gradient(2px 2px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 60px 70px, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 50px 50px, #ddd, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 90px 10px, #eee, rgba(0, 0, 0, 0));
     background-repeat: repeat;
-    mix-blend-mode: overlay;
+    background-size: 200px 200px;
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 1;
   }
+
   #app {
     position: relative;
+    z-index: 2;
   }
+}
+
+/* Ensure root elements occupy full viewport to avoid page scroll */
+html,
+body,
+#app {
+  height: 100%;
+}
+
+/* Prevent page-level scrolling while allowing internal scroll areas */
+html,
+body,
+#app {
+  overflow: hidden;
+}
+
+/* Global Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(25, 167, 199, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(25, 167, 199, 0.36);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes nebulaPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Utility Classes */
+.glow-cyan {
+  box-shadow:
+    0 0 8px rgba(25, 167, 199, 0.28),
+    0 0 16px rgba(25, 167, 199, 0.16);
+}
+
+.glow-purple {
+  box-shadow:
+    0 0 8px rgba(138, 43, 226, 0.28),
+    0 0 16px rgba(138, 43, 226, 0.14);
+}
+
+.glow-pink {
+  box-shadow:
+    0 0 8px rgba(192, 64, 192, 0.28),
+    0 0 16px rgba(192, 64, 192, 0.14);
+}
+
+.bg-gradient-cosmic {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a0033 50%, #0a0e27 100%);
+}
+
+.bg-gradient-neon {
+  background: linear-gradient(135deg, #4a2b9f 0%, #7a34b8 50%, #bf4fbf 100%);
+}
+
+.transition-glow {
+  transition:
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Modal scale+fade transition to avoid layout jumps */
+.modal-scale-enter-from,
+.modal-scale-leave-to {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+.modal-scale-enter-active,
+.modal-scale-leave-active {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+/* Ensure modal panel creates its own stacking context to prevent overlap */
+.modal-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(0);
+  will-change: transform, opacity;
+  z-index: 9999;
+  max-width: 520px;
+  width: calc(100% - 2rem);
+  margin: 0 auto;
+}
+
+/* Overlay that sits under the panel but above page content */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9990;
 }

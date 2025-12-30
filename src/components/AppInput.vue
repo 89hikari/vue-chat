@@ -10,8 +10,7 @@ const emit = defineEmits<{
   (e: "select", item: unknown): void;
 }>();
 
-const showedLabel = ref(props.label || "Search");
-const showedPlaceholder = ref<string>("");
+// shown label/placeholder refs removed — using props directly
 const results = ref<unknown[]>([]);
 const listOpen = ref(false);
 const loading = ref(false);
@@ -26,7 +25,6 @@ const clearTimer = () => {
 };
 
 const handleFocus = () => {
-  showedPlaceholder.value = props.placeholder || "";
   if (results.value.length) {
     listOpen.value = true;
   }
@@ -90,47 +88,44 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative h-10 w-full" ref="wrapperRef">
+  <div class="relative h-12 w-full" ref="wrapperRef">
+    <!-- Input field -->
+    <input
+      v-model="modelValue"
+      :placeholder="props.placeholder || ''"
+      :type="props.type || 'text'"
+      class="w-full h-full rounded-md border border-neon-cyan border-opacity-30 bg-dark-card px-4 py-3 pr-10 font-sans text-sm font-normal text-white outline-none transition-all duration-300 placeholder:text-neon-cyan placeholder:opacity-50 focus:border-opacity-100 focus:shadow-neon-cyan hover:border-opacity-50"
+      @focus="handleFocus"
+    />
+
+    <!-- Right icon/button -->
     <div
-      class="absolute top-2/4 right-3 grid h-5 w-5 -translate-y-2/4 place-items-center text-blue-gray-500"
+      class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2"
     >
       <span
         v-if="loading"
-        class="w-4 h-4 border-2 border-gray-300 border-t-sky-500 rounded-full animate-spin"
+        class="w-4 h-4 border-2 border-neon-cyan border-opacity-50 border-t-neon-cyan rounded-full animate-spin"
       ></span>
       <button
         v-else-if="modelValue"
         @click.prevent="clear"
-        class="text-gray-500 hover:text-gray-700"
+        class="w-8 h-8 flex items-center justify-center bg-transparent border border-neon-cyan border-opacity-40 text-neon-cyan hover:bg-neon-cyan/20 hover:text-white rounded-full transition-colors duration-150"
+        aria-label="Clear"
+        title="Clear"
       >
-        ×
+        <span class="text-lg font-semibold leading-none">×</span>
       </button>
-      <i v-else class="fas fa-heart" aria-hidden="true"></i>
     </div>
 
-    <input
-      v-model="modelValue"
-      class="peer h-full w-full rounded-[7px] border border-blue-gray-200 bg-transparent px-3 py-2.5 !pr-9 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-sky-200 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-      :placeholder="showedPlaceholder"
-      @focus="handleFocus"
-      @blur="showedPlaceholder = ''"
-      :type="props.type"
-    />
-
-    <label
-      class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-sky-200 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-sky-200 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"
-    >
-      {{ showedLabel }}
-    </label>
-
+    <!-- Dropdown results -->
     <ul
       v-if="listOpen && results.length"
-      class="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto z-10"
+      class="absolute left-0 right-0 top-full mt-2 bg-dark-card border border-neon-purple border-opacity-30 rounded-md shadow-neon-purple max-h-60 overflow-auto z-10"
     >
       <li
         v-for="(item, i) in results"
         :key="i"
-        class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+        class="px-4 py-2 hover:bg-cosmic-700 hover:text-neon-cyan cursor-pointer transition-colors duration-200 text-neon-cyan"
         @mousedown.prevent="selectItem(item)"
       >
         {{ getItemLabel(item) }}

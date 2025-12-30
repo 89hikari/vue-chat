@@ -21,7 +21,7 @@ watch(currentChat.messages, () => scrollToBottom());
 <template>
   <div
     ref="scrollContainer"
-    class="h-[calc(100%-6.5rem)] overflow-auto scrollbar-hide"
+    class="h-full min-h-0 overflow-auto scrollbar-hide pb-4"
   >
     <TheMessage
       v-for="message in currentChat.messages"

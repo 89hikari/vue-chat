@@ -3,17 +3,19 @@ import TheForm from "./TheForm.vue";
 </script>
 
 <template>
-  <div class="flex items-center justify-center h-screen">
+  <div class="flex items-center justify-center min-h-screen bg-gradient-cosmic">
     <div
-      class="flex items-center flex-col w-full max-w-[500px] bg-white rounded-lg shadow-2xl p-6 mx-5"
+      class="flex items-center flex-col w-full max-w-[500px] bg-dark-card border border-neon-cyan border-opacity-30 rounded-lg shadow-neon-glow p-8 mx-5 animate-fade-in"
     >
-      <h3 class="text-xl font-semibold mb-5 flex-grow-0">Authorization</h3>
+      <h3 class="text-4xl font-bold mb-8 text-white drop-shadow-lg">
+        Authorization
+      </h3>
       <TheForm />
       <button
         @click="$router.push('/register')"
-        class="font-medium text-blue-600 dark:text-blue-500 hover:underline mt-6"
+        class="font-medium text-neon-cyan hover:text-neon-purple hover:glow-cyan transition-glow mt-8 duration-300"
       >
-        <u>Register</u>
+        Need an account? Register
       </button>
     </div>
   </div>

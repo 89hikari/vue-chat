@@ -21,25 +21,30 @@ const isSelectedAndLoaded = computed(
 </script>
 
 <template>
-  <div class="h-screen w-8/12 flex flex-col">
-    <AppTransition :duration="400">
-      <div class="h-[calc(100%-2.5rem)]" v-if="isSelectedAndLoaded">
-        <TheHeader />
-        <MessagesList v-if="currentChat.messages.length" />
-        <TheEmpty v-else />
-        <div class="mb-8 px-10">
-          <AppTextarea
-            v-model="currentChat.currentMessage"
-            placeholder="Input message"
-            class="mx-auto max-w-[560px]"
-            @keydown.enter.exact.prevent="currentChat.sendMessage"
-            @keydown.enter.shift.exact.prevent="
-              currentChat.currentMessage += '\n'
-            "
-          />
+  <div class="h-screen w-8/12 flex flex-col bg-gradient-cosmic">
+    <div v-if="isSelectedAndLoaded" class="flex-1 flex flex-col min-h-0">
+      <TheHeader />
+
+      <div class="flex-1 min-h-0 flex justify-center">
+        <div class="w-full max-w-[560px] h-full">
+          <MessagesList v-if="currentChat.messages.length" />
+          <TheEmpty v-else />
         </div>
       </div>
-    </AppTransition>
+
+      <div class="px-10 py-4">
+        <AppTextarea
+          v-model="currentChat.currentMessage"
+          placeholder="Input message"
+          class="mx-auto max-w-[560px]"
+          @keydown.enter.exact.prevent="currentChat.sendMessage"
+          @keydown.enter.shift.exact.prevent="
+            currentChat.currentMessage += '\n'
+          "
+        />
+      </div>
+    </div>
+
     <AppTransition>
       <TheEmpty v-if="isNotSelected" />
     </AppTransition>

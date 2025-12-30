@@ -11,6 +11,7 @@ const search = ref<string>("");
 const modal = ref<InstanceType<typeof AppModal>>();
 
 const onMenuClick = () => modal.value?.toggle();
+const closeModal = () => modal.value?.toggle();
 
 const sidebarMessages = useSidebarMessages();
 const setChat = (item: unknown) =>
@@ -27,7 +28,7 @@ const setChat = (item: unknown) =>
       @select="(elem) => setChat(elem)"
     />
     <AppModal ref="modal">
-      <ModalContent />
+      <ModalContent @close="closeModal" />
     </AppModal>
   </div>
 </template>

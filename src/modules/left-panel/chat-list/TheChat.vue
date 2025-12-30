@@ -30,9 +30,12 @@ const { localDate } = useDate(date.value);
 <template>
   <div
     @click="sidebarMessages.setCurrentChat(personId)"
-    class="p-2 flex items-center hover:bg-gray-100 cursor-pointer transition ease-in-out duration-200 rounded-lg w-full mt-1"
+    class="p-3 flex items-center hover:bg-cosmic-700 hover:shadow-neon-purple cursor-pointer transition ease-in-out duration-300 rounded-md w-full mt-2"
     :class="{
-      '!bg-blue-400 !text-white': personId === sidebarMessages.currentChat,
+      'bg-gradient-neon shadow-neon-cyan text-white':
+        personId === sidebarMessages.currentChat,
+      'bg-dark-card border border-neon-purple border-opacity-20 text-neon-cyan':
+        personId !== sidebarMessages.currentChat,
     }"
   >
     <AppAvatarPlaceholder
@@ -45,9 +48,9 @@ const { localDate } = useDate(date.value);
     <div class="w-[calc(100%-4.25rem)]">
       <div class="flex align-center justify-between">
         <p class="font-semibold text-base">{{ personName }}</p>
-        <span class="text-xs">{{ localDate }}</span>
+        <span class="text-xs opacity-70">{{ localDate }}</span>
       </div>
-      <p class="text-base font-light truncate">
+      <p class="text-sm font-light truncate opacity-80">
         {{ message }}
       </p>
     </div>

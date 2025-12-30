@@ -1,16 +1,76 @@
 <script setup lang="ts">
 import ModalAvatarLoad from "./ModalAvatarLoad.vue";
 import { useUserStore } from "@/stores/user.store";
-const user = useUserStore();
+import useDate from "@/composables/useDate";
+import { computed } from "vue";
+
+const emit = defineEmits(["close"] as const);
+
+const userStore = useUserStore();
+const user = userStore.user.info;
+const lastSeen = computed(() => {
+  if (!user?.lastSeenAt) return "never";
+  return useDate(user.lastSeenAt).localDate.value;
+});
+
+const handleLogout = () => {
+  userStore.logout();
+  emit("close");
+};
 </script>
 
 <template>
-  <h3 class="text-xl font-semibold mb-6 flex-grow-0 text-center">Menu</h3>
-  <ModalAvatarLoad />
-  <button
-    class="mb-2 mt-4 ml-auto flex md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-md hover:shadow-lg hover:bg-gray-100"
-    @click="user.logout"
+  <div
+    class="relative rounded-xl overflow-hidden shadow-neon-glow bg-dark-card w-full"
   >
-    Logout
-  </button>
+    <div
+      class="px-6 py-4 bg-gradient-to-r from-cosmic-900/20 via-neon-purple/30 to-cosmic-900/10"
+    >
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-white">Menu</h3>
+        <button
+          @click="$emit('close')"
+          class="text-neon-cyan hover:text-neon-purple"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <div class="px-6 py-6 flex items-center gap-4">
+      <div class="flex-shrink-0">
+        <div
+          class="w-16 h-16 rounded-full overflow-hidden ring-2 ring-neon-cyan/30"
+        >
+          <img
+            v-if="user?.hasAvatar"
+            :src="`/vue-chat/api/users/${user?.id}/avatar`"
+            alt="avatar"
+            class="w-full h-full object-cover"
+          />
+          <div v-else class="w-full h-full bg-gradient-neon"></div>
+        </div>
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <div class="text-white font-semibold truncate">{{ user?.name }}</div>
+        <div class="text-sm text-neon-cyan opacity-80">
+          Last seen: {{ lastSeen }}
+        </div>
+      </div>
+    </div>
+
+    <div class="px-6 pb-6">
+      <ModalAvatarLoad />
+
+      <div class="mt-6 flex justify-end">
+        <button
+          @click="handleLogout"
+          class="px-4 py-2 rounded-md border border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
