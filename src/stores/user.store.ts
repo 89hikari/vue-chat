@@ -19,6 +19,7 @@ const initialUser = () => ({
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<IMyUser>(initialUser());
+  const isIdentifying = ref(false);
   const login = async (name: string, password: string) => {
     try {
       const response = await post<LoginResponse>("auth/login", {
@@ -52,11 +53,16 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const identify = async () => {
+    // Prevent spamming the backend with repeated self lookups
+    if (isIdentifying.value || user.value.info || !user.value.token) return;
+    isIdentifying.value = true;
     try {
       const myUserData = (await get("users/self")) as IMyUser["info"];
       user.value.info = myUserData;
     } catch {
       logout();
+    } finally {
+      isIdentifying.value = false;
     }
   };
 

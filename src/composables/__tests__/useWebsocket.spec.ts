@@ -9,12 +9,14 @@ interface MockSocket {
   off: Mock;
   removeAllListeners: Mock;
   emit: Mock;
+  auth?: unknown;
   connected: boolean;
 }
 
 const mockSocket = (): MockSocket => {
   const events: Record<string, MockHandler[]> = {};
   return {
+    auth: undefined,
     connect: vi.fn(function (this: MockSocket) {
       this.connected = true;
     }),
@@ -47,6 +49,7 @@ import useWebsocket from "@/composables/useWebsocket";
 
 describe("useWebsocket", () => {
   beforeEach(() => {
+    localStorage.clear();
     // ensure a fresh module instance by clearing require cache - Vitest handles ESM mocks
   });
 
@@ -71,5 +74,12 @@ describe("useWebsocket", () => {
     expect(s.removeAllListeners).toHaveBeenCalled();
     const s2 = ws.getWebsocket();
     expect(s2).not.toBe(s);
+  });
+
+  it("sets auth token before connecting", () => {
+    localStorage.setItem("token", "abc123");
+    const ws = useWebsocket();
+    const s = ws.connect();
+    expect((s as unknown as MockSocket).auth).toEqual({ token: "abc123" });
   });
 });
