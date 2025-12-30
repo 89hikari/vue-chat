@@ -50,6 +50,25 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     );
   };
 
+  const handleEditedMessage = (payload: {
+    id: number;
+    message: string;
+    senderId: number;
+    receiverId: number;
+    date: string;
+    isMe: boolean;
+  }) => {
+    const peerId = payload.isMe ? payload.receiverId : payload.senderId;
+    const msg = messages.value.find(
+      (m) => String(m.personId) === String(peerId)
+    );
+    // Only update sidebar preview if this is the last message from that person
+    if (msg && String(msg.id) === String(payload.id)) {
+      msg.message = payload.message;
+      msg.date = payload.date;
+    }
+  };
+
   return {
     loaded,
     getMessages,
@@ -59,6 +78,7 @@ export const useSidebarMessages = defineStore("sidebarMessages", () => {
     setPersonOnline,
     setPersonsOnline,
     handleNewMessage,
+    handleEditedMessage,
     getUsers,
   };
 });

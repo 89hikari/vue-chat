@@ -64,6 +64,40 @@ export const useCurrentChat = defineStore("currentChat", () => {
     messagesList.handleNewMessageInChat(messages, payload, user);
   };
 
+  const handleEditedMessage = (payload: {
+    id: number;
+    message: string;
+    senderId: number;
+    receiverId: number;
+    date: string;
+    isMe: boolean;
+  }) => {
+    const idx = messages.value.findIndex(
+      (m) => String(m.id) === String(payload.id)
+    );
+    if (idx !== -1) {
+      messages.value[idx] = {
+        ...messages.value[idx],
+        message: payload.message,
+        createdAt: payload.date,
+        isMe: payload.isMe,
+      };
+      messages.value = [...messages.value];
+    }
+
+    // Sync sidebar preview when editing the most recent message
+    const sidebar = useSidebarMessages();
+    const peerId =
+      payload.receiverId === user.value?.id
+        ? payload.senderId
+        : payload.receiverId;
+    const sidebarItem = sidebar.messages.find((m) => m.personId === peerId);
+    if (sidebarItem) {
+      sidebarItem.message = payload.message;
+      sidebarItem.date = payload.date;
+    }
+  };
+
   const updateMessage = async (
     messageId: number | string,
     newMessage: string
@@ -86,13 +120,16 @@ export const useCurrentChat = defineStore("currentChat", () => {
 
       const updated = response.data;
 
-      const idx = messages.value.findIndex((m) => m.id === messageId);
+      const idx = messages.value.findIndex(
+        (m) => String(m.id) === String(messageId)
+      );
       if (idx !== -1) {
         messages.value[idx] = {
           ...messages.value[idx],
           message: updated.message,
           createdAt: updated.date,
         };
+        messages.value = [...messages.value];
       }
 
       // Keep sidebar preview in sync for the current chat
@@ -106,6 +143,10 @@ export const useCurrentChat = defineStore("currentChat", () => {
         sidebarItem.message = updated.message;
         sidebarItem.date = updated.date;
       }
+
+      // Emit socket event so backend broadcasts to peer
+      const websocketStore = useWebsocketsStore();
+      websocketStore.emitEditMessage(messageId, trimmed);
     } catch (error) {
       console.error(error);
     }
@@ -121,6 +162,7 @@ export const useCurrentChat = defineStore("currentChat", () => {
     setPersonOnline,
     setPersonsOnline,
     handleNewMessage,
+    handleEditedMessage,
     updateMessage,
   };
 });

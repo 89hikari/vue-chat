@@ -56,11 +56,26 @@ export const useWebsocketsStore = defineStore("websockets", () => {
         currentChat.handleNewMessage(payload);
       };
 
+      const messageEditedCallback = (payload: {
+        id: number;
+        message: string;
+        senderId: number;
+        receiverId: number;
+        date: string;
+        isMe: boolean;
+      }) => {
+        const currentChat = useCurrentChat();
+        const sidebarMessages = useSidebarMessages();
+        currentChat.handleEditedMessage(payload);
+        sidebarMessages.handleEditedMessage(payload);
+      };
+
       // registerUnique ensures we don't create duplicate handlers if connectToWebsocket is called multiple times
       events.registerUnique("newUserConnected", newUserConnectedCallback);
       events.registerUnique("userDisconnected", userDisconnectedCallback);
       events.registerUnique("connectedPeers", connectedPeersCallback);
       events.registerUnique("newMessage", newMessageCallback);
+      events.registerUnique("messageEdited", messageEditedCallback);
     }
   };
 
@@ -71,11 +86,23 @@ export const useWebsocketsStore = defineStore("websockets", () => {
     });
   };
 
+  const emitEditMessage = (id: number | string, message: string) => {
+    wSocket?.emit("editMessage", {
+      id,
+      message,
+    });
+  };
+
   const disconnectWebsocket = () => {
     const ws = useWebsocket();
     ws.disconnect();
     wSocket = null;
   };
 
-  return { connectToWebsocket, emitMessage, disconnectWebsocket };
+  return {
+    connectToWebsocket,
+    emitMessage,
+    emitEditMessage,
+    disconnectWebsocket,
+  };
 });

@@ -4,8 +4,7 @@ import axios, {
 } from "axios";
 
 // Normalize the API base URL and ensure the v1 prefix is present by default.
-const rawApiBase =
-  import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
+const rawApiBase = import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
 const normalizedBase = rawApiBase.replace(/\/+$/, "");
 export const apiBaseUrl = /\/v\d+$/i.test(normalizedBase)
   ? normalizedBase

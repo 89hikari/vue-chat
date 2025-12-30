@@ -9,7 +9,10 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-  (e: "update-message", payload: { id: number | string; message: string }): void;
+  (
+    e: "update-message",
+    payload: { id: number | string; message: string }
+  ): void;
 }>();
 
 const messageText = computed(() => props.message?.message ?? "");
@@ -128,9 +131,10 @@ watch(
 
         <template v-else>
           <p class="whitespace-pre-line text-sm">{{ messageText }}</p>
-          <span class="text-xs absolute right-2 sm:right-3 bottom-1 opacity-70">{{
-            localDate
-          }}</span>
+          <span
+            class="text-xs absolute right-2 sm:right-3 bottom-1 opacity-70"
+            >{{ localDate }}</span
+          >
         </template>
       </div>
     </div>
