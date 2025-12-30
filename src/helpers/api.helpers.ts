@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const apiPrefix = import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
+import { apiBaseUrl } from "./api.client";
 
 interface IRequestParams {
   controllerName: string;
@@ -11,7 +10,9 @@ interface IRequestParams {
 
 export const post = async (params: IRequestParams) =>
   await axios.post(
-    `${apiPrefix}${params.controllerName}${params.methodName ? `/${params.methodName}` : ""}`,
+    `${apiBaseUrl}/${params.controllerName}${
+      params.methodName ? `/${params.methodName}` : ""
+    }`,
     params.queryParams || {},
     {
       headers: {
@@ -23,7 +24,9 @@ export const post = async (params: IRequestParams) =>
 
 export const get = async (params: IRequestParams) =>
   await axios.get(
-    `${apiPrefix}${params.controllerName}${params.methodName ? `/${params.methodName}` : ""}${
+    `${apiBaseUrl}/${params.controllerName}${
+      params.methodName ? `/${params.methodName}` : ""
+    }${
       params.queryParams
         ? `?${Object.keys(params.queryParams)
             .map((key) => `${key}=${params.queryParams![key as keyof object]}`)

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { apiBaseUrl } from "@/helpers/api.client";
 
 interface Props {
   id?: number | string;
@@ -13,11 +14,15 @@ const classNames = computed(
   () =>
     "rounded-full bg-gray-300 flex items-center justify-center overflow-hidden"
 );
+
+const avatarUrl = computed(
+  () => props.url || `${apiBaseUrl}/users/${props.id}/avatar`
+);
 </script>
 <template>
   <div :class="classNames" :style="{ width: sizePx, height: sizePx }">
     <img
-      :src="url || `/vue-chat/api/users/${id}/avatar`"
+      :src="avatarUrl"
       alt="User Avatar"
       class="w-full h-full object-cover"
     />

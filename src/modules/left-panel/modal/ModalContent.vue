@@ -2,6 +2,7 @@
 import ModalAvatarLoad from "./ModalAvatarLoad.vue";
 import { useUserStore } from "@/stores/user.store";
 import useDate from "@/composables/useDate";
+import { apiBaseUrl } from "@/helpers/api.client";
 import { computed } from "vue";
 
 const emit = defineEmits(["close"] as const);
@@ -44,7 +45,7 @@ const handleLogout = () => {
         >
           <img
             v-if="user?.hasAvatar"
-            :src="`/vue-chat/api/users/${user?.id}/avatar`"
+            :src="`${apiBaseUrl}/users/${user?.id}/avatar`"
             alt="avatar"
             class="w-full h-full object-cover"
           />

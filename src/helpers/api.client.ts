@@ -3,9 +3,15 @@ import axios, {
   type AxiosRequestHeaders,
 } from "axios";
 
-const apiPrefix = import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
+// Normalize the API base URL and ensure the v1 prefix is present by default.
+const rawApiBase =
+  import.meta.env.VITE_SERVER_API_PATH || "/vue-chat/api/";
+const normalizedBase = rawApiBase.replace(/\/+$/, "");
+export const apiBaseUrl = /\/v\d+$/i.test(normalizedBase)
+  ? normalizedBase
+  : `${normalizedBase}/v1`;
 
-const api = axios.create({ baseURL: apiPrefix });
+const api = axios.create({ baseURL: `${apiBaseUrl}/` });
 
 api.interceptors.request.use((cfg) => {
   if (!cfg.headers) cfg.headers = {} as AxiosRequestHeaders;

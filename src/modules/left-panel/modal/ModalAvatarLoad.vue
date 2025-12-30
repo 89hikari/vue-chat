@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppFileUpload from "@/components/AppFileUpload.vue";
 import { useUserStore } from "@/stores/user.store";
+import { apiBaseUrl } from "@/helpers/api.client";
 import { computed, ref, watch } from "vue";
 
 const user = useUserStore();
@@ -10,7 +11,7 @@ const isTooLarge = ref(false);
 const version = ref(Date.now());
 
 const existingAvatar = computed(
-  () => `/vue-chat/api/users/${user.user.info?.id}/avatar?v=${version.value}`
+  () => `${apiBaseUrl}/users/${user.user.info?.id}/avatar?v=${version.value}`
 );
 
 watch(avatarFile, async () => {
