@@ -6,6 +6,10 @@ import { useCurrentChat } from "@/stores/current-chat";
 const currentChat = useCurrentChat();
 const scrollContainer = ref<HTMLElement | null>(null);
 
+const updateMessage = (payload: { id: number | string; message: string }) => {
+  currentChat.updateMessage(payload.id, payload.message);
+};
+
 const scrollToBottom = () => {
   nextTick(() => {
     if (scrollContainer.value) {
@@ -27,6 +31,7 @@ watch(currentChat.messages, () => scrollToBottom());
       v-for="message in currentChat.messages"
       :key="message.id"
       :message="message"
+      @update-message="updateMessage"
     />
   </div>
 </template>

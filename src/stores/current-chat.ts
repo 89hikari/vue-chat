@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { get, post } from "@/helpers/api.helpers";
+import { get, patch, post } from "@/helpers/api.helpers";
 import type { IMessage } from "@/models/IMessage";
 import type { IUser } from "@/models/IUser";
 import type { IConnection } from "@/models/IConnection";
@@ -8,6 +8,7 @@ import { useWebsocketsStore } from "./websockets.store";
 import type { INewMessage } from "@/models/INewMessage";
 import usePresence from "@/composables/usePresence";
 import useMessagesList from "@/composables/useMessagesList";
+import { useSidebarMessages } from "./sidebar-messages.store";
 export const useCurrentChat = defineStore("currentChat", () => {
   const loaded = ref<boolean>(true);
   const messages = ref<IMessage[]>([]);
@@ -63,6 +64,53 @@ export const useCurrentChat = defineStore("currentChat", () => {
     messagesList.handleNewMessageInChat(messages, payload, user);
   };
 
+  const updateMessage = async (
+    messageId: number | string,
+    newMessage: string
+  ) => {
+    const trimmed = newMessage.trim();
+    if (!trimmed) return;
+    try {
+      const response = await patch<{
+        id: number;
+        message: string;
+        senderId: number;
+        receiverId: number;
+        date: string;
+        isMe: boolean;
+      }>({
+        controllerName: "messages",
+        methodName: String(messageId),
+        body: { message: trimmed },
+      });
+
+      const updated = response.data;
+
+      const idx = messages.value.findIndex((m) => m.id === messageId);
+      if (idx !== -1) {
+        messages.value[idx] = {
+          ...messages.value[idx],
+          message: updated.message,
+          createdAt: updated.date,
+        };
+      }
+
+      // Keep sidebar preview in sync for the current chat
+      const sidebar = useSidebarMessages();
+      const peerId =
+        updated.receiverId === user.value?.id
+          ? updated.senderId
+          : updated.receiverId;
+      const sidebarItem = sidebar.messages.find((m) => m.personId === peerId);
+      if (sidebarItem) {
+        sidebarItem.message = updated.message;
+        sidebarItem.date = updated.date;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     loaded,
     getNewChatData,
@@ -73,5 +121,6 @@ export const useCurrentChat = defineStore("currentChat", () => {
     setPersonOnline,
     setPersonsOnline,
     handleNewMessage,
+    updateMessage,
   };
 });

@@ -37,7 +37,7 @@ const nameShown = computed(() =>
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background-color: #31e620;
+    background-color: #30e62096;
     bottom: 0;
     right: 0;
   }

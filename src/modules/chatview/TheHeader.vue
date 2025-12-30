@@ -47,11 +47,6 @@ const goBack = () => {
         :name="user?.name ?? ''"
         :is-online="user?.isOnline"
       />
-      <span
-        v-if="user?.isOnline"
-        class="absolute -bottom-0 -right-0 w-3 h-3 rounded-full bg-neon-cyan ring-2 ring-dark-card animate-glow-pulse"
-        aria-hidden="true"
-      />
     </div>
 
     <div class="flex flex-col justify-center flex-1 min-w-0">
