@@ -21,7 +21,7 @@ const isSelectedAndLoaded = computed(
 </script>
 
 <template>
-  <div class="h-screen w-8/12 flex flex-col bg-gradient-cosmic">
+  <div class="h-screen w-full flex flex-col bg-gradient-cosmic">
     <div v-if="isSelectedAndLoaded" class="flex-1 flex flex-col min-h-0">
       <TheHeader />
 
@@ -32,7 +32,7 @@ const isSelectedAndLoaded = computed(
         </div>
       </div>
 
-      <div class="px-10 py-4">
+      <div class="px-3 sm:px-4 md:px-10 py-3 md:py-4">
         <AppTextarea
           v-model="currentChat.currentMessage"
           placeholder="Input message"

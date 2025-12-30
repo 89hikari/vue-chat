@@ -37,17 +37,19 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <div class="w-full px-6 mt-6 pb-2 animate-slide-in-up">
+  <div
+    class="w-full px-3 sm:px-4 md:px-6 mt-4 md:mt-6 pb-2 animate-slide-in-up"
+  >
     <div
       class="w-full flex"
       :class="props.message?.isMe ? 'justify-end' : 'justify-start'"
     >
       <div
-        class="p-3 pb-2 relative transition-all duration-300 hover:shadow-lg"
+        class="p-2.5 sm:p-3 pb-2 relative transition-all duration-300 hover:shadow-lg"
         :class="classes"
       >
         <p class="whitespace-pre-line text-sm">{{ messageText }}</p>
-        <span class="text-xs absolute right-3 bottom-1 opacity-70">{{
+        <span class="text-xs absolute right-2 sm:right-3 bottom-1 opacity-70">{{
           localDate
         }}</span>
       </div>

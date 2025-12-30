@@ -19,7 +19,7 @@ const setChat = (item: unknown) =>
 </script>
 
 <template>
-  <div class="px-3 py-2 flex items-center z-100">
+  <div class="px-2 sm:px-3 py-2 flex items-center z-100">
     <AppIconButton icon="pi-align-justify" class="mr-2" @click="onMenuClick" />
     <AppInput
       v-model="search"

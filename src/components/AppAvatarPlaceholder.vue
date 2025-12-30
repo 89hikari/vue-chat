@@ -21,10 +21,10 @@ const nameShown = computed(() =>
 <template>
   <div
     :style="{ background: stringToGradient(name) }"
-    class="rounded-full w-12 h-12 mr-3 flex-shrink-0 small relative z-0"
+    class="rounded-full w-12 h-12 mr-3 flex-shrink-0 small relative z-0 flex items-center justify-center"
     :class="{ online: isOnline }"
   >
-    <p class="text-2xl text-center mt-2">{{ nameShown }}</p>
+    <p class="text-2xl font-semibold text-white">{{ nameShown }}</p>
   </div>
 </template>
 

@@ -5,7 +5,7 @@ import ChatList from "./chat-list/ChatList.vue";
 
 <template>
   <div
-    class="left-column h-screen shadow-neon-purple bg-dark-card border-r border-neon-purple border-opacity-20 w-4/12"
+    class="left-column h-screen shadow-neon-purple bg-dark-card border-r border-neon-purple border-opacity-20 w-full md:w-80 lg:w-96 xl:w-[400px]"
   >
     <TheHeader />
     <ChatList />

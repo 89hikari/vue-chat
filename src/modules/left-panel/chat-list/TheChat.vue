@@ -3,7 +3,8 @@ import AppAvatar from "@/components/AppAvatar.vue";
 import AppAvatarPlaceholder from "@/components/AppAvatarPlaceholder.vue";
 import useDate from "@/composables/useDate";
 import { useSidebarMessages } from "@/stores/sidebar-messages.store";
-import { toRefs } from "vue";
+import { toRefs, inject } from "vue";
+import type { useResponsiveLayout } from "@/composables/useResponsiveLayout";
 
 type Chat = {
   id: number;
@@ -19,17 +20,26 @@ interface Props {
 }
 
 const sidebarMessages = useSidebarMessages();
+const layout = inject<ReturnType<typeof useResponsiveLayout>>("layout");
 const props = defineProps<Props>();
 const { personId, personName, message, date, isOnline, hasAvatar } = toRefs(
   props.chat
 );
 
 const { localDate } = useDate(date.value);
+
+const handleClick = () => {
+  sidebarMessages.setCurrentChat(personId.value);
+  // Switch to chat view on mobile
+  if (layout?.isMobile.value) {
+    layout.showChat();
+  }
+};
 </script>
 
 <template>
   <div
-    @click="sidebarMessages.setCurrentChat(personId)"
+    @click="handleClick"
     class="p-3 flex items-center hover:bg-cosmic-700 hover:shadow-neon-purple cursor-pointer transition ease-in-out duration-300 rounded-md w-full mt-2"
     :class="{
       'bg-gradient-neon shadow-neon-cyan text-white':
