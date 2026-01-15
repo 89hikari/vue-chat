@@ -1,6 +1,5 @@
+import { apiBaseUrl } from "@/helpers/api.client";
 import { io, type Socket } from "socket.io-client";
-
-const serverURL = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
 
 const getAuthPayload = () => ({ token: localStorage.getItem("token") || "" });
 
@@ -9,7 +8,11 @@ let socket: Socket | null = null;
 export default function useWebsocket() {
   const getWebsocket = (): Socket => {
     if (!socket)
-      socket = io(serverURL, { autoConnect: false, auth: getAuthPayload() });
+      socket = io(apiBaseUrl, {
+        autoConnect: false,
+        auth: getAuthPayload(),
+        path: import.meta.env.PROD ? `/vue-chat/socket.io` : "/socket.io",
+      });
     return socket;
   };
 
