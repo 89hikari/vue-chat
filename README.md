@@ -5,6 +5,8 @@ Lightweight Vue 3 chat client that talks to the NestJS backend (telegram_clone_b
 Deployed sample: https://projects.vladislav0151.ru/vue-chat/
 Backend repo: https://github.com/89hikari/telegram_clone_backend
 
+<img width="1279" height="686" alt="image" src="https://github.com/user-attachments/assets/de9485e4-2090-4cf7-af17-1cc32c62402b" />
+
 ### Features
 
 - Email signup/login with token-based auth
