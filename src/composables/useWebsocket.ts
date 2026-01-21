@@ -11,7 +11,9 @@ export default function useWebsocket() {
       socket = io(apiBaseUrl, {
         autoConnect: false,
         auth: getAuthPayload(),
-        path: import.meta.env.PROD ? `/vue-chat/socket.io` : "/socket.io",
+        path: import.meta.env.PROD
+          ? `/vue-chat/vue-chat/socket.io`
+          : "/socket.io",
       });
     return socket;
   };
