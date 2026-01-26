@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIconButton from "@/components/AppIconButton.vue";
 import AppTransition from "@/components/AppTransition.vue";
 import AppTextarea from "@/components/AppTextarea.vue";
 import TheHeader from "./TheHeader.vue";
@@ -6,7 +7,7 @@ import MessagesList from "./messages-list/MessagesList.vue";
 import TheEmpty from "./TheEmpty.vue";
 import useChat from "@/composables/useChat";
 import { useCurrentChat } from "@/stores/current-chat";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 useChat().watchCurrentChat();
 const currentChat = useCurrentChat();
@@ -18,20 +19,30 @@ const isNotSelected = computed(
 const isSelectedAndLoaded = computed(
   () => currentChat.user?.id && currentChat.loaded
 );
+const scrollButtonToggle = ref<boolean>(false);
 </script>
 
 <template>
-  <div class="h-screen w-full flex flex-col bg-gradient-cosmic">
+  <div class="w-full flex flex-col bg-gradient-cosmic" style="height: 100dvh">
     <div v-if="isSelectedAndLoaded" class="flex-1 flex flex-col min-h-0">
       <TheHeader />
-
-      <div class="flex-1 min-h-0 flex justify-center">
+      <div class="flex-1 min-h-0 flex justify-center px-10 relative">
         <div class="w-full max-w-[560px] h-full">
-          <MessagesList v-if="currentChat.messages.length" />
+          <MessagesList
+            :toggle="scrollButtonToggle"
+            v-if="currentChat.messages.length"
+          />
           <TheEmpty v-else />
         </div>
+        <div class="absolute bottom-3 right-3">
+          <AppIconButton
+            icon="pi-arrow-circle-down"
+            size="2"
+            class="bg-secondary text-white hover:bg-primary/90"
+            @click="() => (scrollButtonToggle = !scrollButtonToggle)"
+          />
+        </div>
       </div>
-
       <div class="px-3 sm:px-4 md:px-10 py-3 md:py-4">
         <AppTextarea
           v-model="currentChat.currentMessage"

@@ -109,6 +109,7 @@ onBeforeUnmount(() => {
       <button
         v-else-if="modelValue"
         @click.prevent="clear"
+        tabindex="-1"
         class="w-8 h-8 flex items-center justify-center bg-transparent border border-neon-cyan border-opacity-40 text-neon-cyan hover:bg-neon-cyan/20 hover:text-white rounded-full transition-colors duration-150"
         aria-label="Clear"
         title="Clear"

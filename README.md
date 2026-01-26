@@ -1,4 +1,4 @@
-## Vue Chat (Telegram-style clone)
+## Vue Chat
 
 Lightweight Vue 3 chat client that talks to the NestJS backend (telegram_clone_backend). Supports auth, presence, avatars, and real-time messaging via WebSockets.
 
@@ -72,14 +72,7 @@ Backend repo: https://github.com/89hikari/telegram_clone_backend
 
 - Load older messages (pagination/infinite scroll beyond last 30)
 - Profile editing (bio, display settings)
-- Rich presence and user info panel
+- Fix presence indicator (online/last seen) and user info panel
 - Voice messages and media attachments
 - Per-chat settings (mute, pin) and read receipts
 - More robust error states and offline handling
-
-### Contributing
-
-- Fork and PRs welcome. Please run lint/type-check/tests before submitting:
-  - npm run lint
-  - npm run type-check
-  - npm run test:unit

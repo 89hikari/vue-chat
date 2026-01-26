@@ -3,6 +3,14 @@ import TheMessage from "./TheMessage.vue";
 import { nextTick, onMounted, ref, watch } from "vue";
 import { useCurrentChat } from "@/stores/current-chat";
 
+const props = defineProps({
+  toggle: {
+    default: false,
+    required: true,
+    type: Boolean,
+  },
+});
+
 const currentChat = useCurrentChat();
 const scrollContainer = ref<HTMLElement | null>(null);
 
@@ -19,7 +27,15 @@ const scrollToBottom = () => {
 };
 
 onMounted(() => scrollToBottom());
-watch(currentChat.messages, () => scrollToBottom());
+watch([currentChat.messages, () => props.toggle], () =>
+  nextTick(() => {
+    scrollToBottom();
+  })
+);
+
+defineExpose({
+  scrollToBottom,
+});
 </script>
 
 <template>

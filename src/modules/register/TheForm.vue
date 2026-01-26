@@ -19,26 +19,26 @@ const errorMessage = ref<string>();
 const formRef = ref<ICommonForm>({
   username: {
     value: "",
-    placeholder: "Type here",
+    placeholder: "Username",
     label: "Username",
     validation: usernameValidator,
   },
   email: {
     value: "",
-    placeholder: "example@ex.le",
+    placeholder: "E-Mail",
     label: "E-Mail",
     validation: emailValidator,
   },
   password: {
     value: "",
-    placeholder: "Type here",
+    placeholder: "Password",
     label: "Password",
     type: "password",
     validation: passwordValidator,
   },
   passwordConfirmation: {
     value: "",
-    placeholder: "Type here",
+    placeholder: "Confirm password",
     label: "Confirm password",
     type: "password",
     validation: passwordConfirmationValidator,

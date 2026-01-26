@@ -7,7 +7,11 @@ import TheForm from "./TheForm.vue";
     <div
       class="flex items-center flex-col w-full max-w-[500px] bg-dark-card border border-neon-cyan border-opacity-30 rounded-lg shadow-neon-glow p-4 sm:p-6 md:p-8 mx-3 sm:mx-5 animate-fade-in"
     >
-      <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-white drop-shadow-lg">Registration</h3>
+      <h3
+        class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-white drop-shadow-lg"
+      >
+        Registration
+      </h3>
       <TheForm />
       <button
         @click="$router.push('/auth')"

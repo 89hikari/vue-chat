@@ -12,7 +12,6 @@ body {
   font-family: "Montserrat", sans-serif;
   background: linear-gradient(135deg, #0a0e27 0%, #1a0033 50%, #0a0e27 100%);
   background-attachment: fixed;
-  min-height: 100vh;
   color: #e0e6ff;
 
   &::before {
@@ -45,7 +44,7 @@ body {
 html,
 body,
 #app {
-  height: 100%;
+  height: calc(var(--vh) * 100);
 }
 
 /* Prevent page-level scrolling while allowing internal scroll areas */
